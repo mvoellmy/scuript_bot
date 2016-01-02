@@ -43,6 +43,8 @@ def on_message(message):
     if message.content.startswith('!join'):
         url = message.content.replace("!join ", "")
         client.accept_invite(url)
+        client.send_message(message.channel, "SCURIPT_BOT successfully joined your channel!")
+
 
 # Event for joining members
 @client.event
