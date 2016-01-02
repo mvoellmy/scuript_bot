@@ -3,7 +3,11 @@ import discord
 client = discord.Client()
 client.login('miro@voellmy.com', 'beep-beep')
 
-tutorial_msg = "'''Guide to setup your sound in Discord. \n 1. Check if your microphone is muted \n 2. Check input & output settings \n 3. Activate automatic input sensitivity'''"
+
+def tutorial(tutorial_channel):
+    tutorial_msg = "`Guide to setup your sound in Discord. \n 1. Check if your microphone is muted \n 2. Check input & output settings \n 3. Activate automatic input sensitivity`"
+    client.send_message(tutorial_channel, tutorial_msg)
+
 
 help_msg = '!version \n \n     Displays version of the SCURIPT_BOT \n \n!tutorial \n \n     Guide to setup your sound in Discord'
 
@@ -16,7 +20,7 @@ def on_message(message):
         client.send_message(message.channel, 'SCURIPT BOT VERSION 0.1!')
 
     if message.content == '!tutorial':
-        client.send_message(message.channel, tutorial_msg)
+        tutorial(message.channel)
 
     if message.content == '!help':
         client.send_message(message.channel, help_msg)
@@ -26,7 +30,7 @@ def on_message(message):
 def on_member_join(member):
     server = member.server
     client.send_message(server, 'Welcome {0} to {1.name}!'.format(member.mention(), server))
-    client.send_message(member, tutorial_msg )
+    tutorial(member)
 
 @client.event
 def on_ready():
