@@ -6,7 +6,9 @@ SCURIPT_BOT was developed to help new users set up their microphone and headphon
 
     !join (SERVER_URL)
 
-Makes SCURIPT_BOT join your server by executing the following command in the SCURIPT-SERVER found at 
+Makes SCURIPT_BOT join your server by executing the following command in the SCURIPT-SERVER found at:
+
+htttp://discord.me/scuript_bot	
 
     !tutorial
 
