@@ -18,7 +18,7 @@ def tutorial(tutorial_channel):
     client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
 
 
-help_msg = '`!version` \n \n \t Displays version of the SCURIPT_BOT \n \n`!tutorial` \n \n \t Guide to setup your sound in Discord'
+help_msg = '`!version` \n \n \tDisplays version of the SCURIPT_BOT \n \n`!tutorial` \n \n \tGuide to setup your sound in Discord \n \n `!join (SERVER_URL)` \n \n \tMake SCURIPT_BOT join your server!'
 
 @client.event
 def on_message(message):
@@ -34,6 +34,9 @@ def on_message(message):
     if message.content == '!help':
         client.send_message(message.channel, help_msg)
 
+    if message.content.startswith('!join'):
+        url = message.content.replace("!join ", "")
+        client.accept_invite(url)
 
 @client.event
 def on_member_join(member):
