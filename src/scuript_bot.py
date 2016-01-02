@@ -23,22 +23,36 @@ def tutorial(tutorial_channel):
     client.send_file(tutorial_channel, img_2)
     client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
 
-help_msg = '`!version` \n \n \tDisplays version of the SCURIPT_BOT \n \n`!tutorial` \n \n \tGuide to setup your sound in Discord \n \n `!join (SERVER_URL)` \n \n \tMake SCURIPT_BOT join your server! \n \n `!git` \n \n \tLink to the github repo. \n \n `!tts (TEXT)` \n \n \tLet the bot speak for you!'
 
 # Commands for the bot
 @client.event
 def on_message(message):
+    placeholder = "\n \t"
+
+    commands =  {"!help"    : "Displays version of the SCURIPT_BOT", 
+                "!version"  : "Look up the current version of scuript_bot!.", 
+                "!hello"    : "Say 'Hello' to scuript_bot!", 
+                "!tutorial" : "Guide to setup your sound in Discord", 
+                "!join"     : "enter your (SERVER_URL)", 
+                "!git"      : "Link to the github repo.", 
+                "!tts"      : "Let the bot speak for you!",
+                "!rekt"     : "Get R3kt son!"} 
+
+    if message.content == '!help':       
+        help_msg = "Looks like somebody needs help, lets see what we can do for you! beep-boop:\n \n"
+        for k,v in commands.items():
+            help_msg+='`{0}`{1}{2}\n'.format(k, placeholder, v)
+
+        client.send_message(message.channel, help_msg)
+
     if message.content == '!hello':
-        client.send_message(message.channel, 'Hello was received!')
+        client.send_message(message.channel, 'Hello received. Thank you! beep-boop')
 
     if message.content == '!version':
         client.send_message(message.channel, 'SCURIPT BOT VERSION 0.1!')
 
     if message.content == '!tutorial':
         tutorial(message.channel)
-
-    if message.content == '!help':
-        client.send_message(message.channel, help_msg)
 
     if message.content.startswith('!join'):
         url = message.content.replace("!join ", "")
@@ -54,7 +68,6 @@ def on_message(message):
         client.send_message(message.channel, tts_msg, True, True)
 
     if message.content.startswith('!rekt'):
-        tts_msg = message.content.replace("!rekt ", "")
         tts_msg = 'You have been rekt!'
         client.send_message(message.channel, tts_msg, True, True)
 
