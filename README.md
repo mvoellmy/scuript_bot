@@ -1,1 +1,23 @@
 # scuript_bot
+
+SCURIPT_BOT was developed to help new users set up their microphone and headphones propperly.
+
+## Usage
+
+!join SERVER_URL
+
+!tutorial
+
+!version
+
+## Installation
+
+### Setting up your cfg.txt
+
+Edit cfg.txt in src to match your bots credidentials.
+
+```
+[file]
+username= YOUR_EMAIL
+password= YOUR_PASSWORD
+```
