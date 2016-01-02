@@ -7,12 +7,8 @@ client.login('miro@voellmy.com', 'beep-beep')
 def on_message(message):
     if message.content.startswith('!hello'):
         client.send_message(message.channel, 'Hello was received!')
-
-@client.event
-def on_message(message):
     if message.content.startswith('!version'):
         client.send_message(message.channel, 'SCURIPT BOT VERSION 0.1!')
-
 
 @client.event
 def on_ready():
