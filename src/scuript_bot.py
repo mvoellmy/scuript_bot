@@ -1,13 +1,19 @@
 import discord
 import getpass
+import configparser
 
+# Read cfg.txt
+config = configparser.ConfigParser()   
+config.read('cfg.txt')
+username = config.get('file', 'username')
+password = config.get('file', 'password')
+
+# Connect Discord Client
 client = discord.Client()
-'''username = input('Email:')
-password = getpass.getpass('Password:')
-client.login(username, password)'''
+client.login(username, password)
 
-client.login('miro@voellmy.com', 'beep-beep')
 
+# Messages
 def tutorial(tutorial_channel):
     img_1 = open('../images/tutorial/img_tutorial_000.jpg',"rb")
     img_2 = open('../images/tutorial/img_tutorial_001.jpg',"rb")
@@ -17,9 +23,9 @@ def tutorial(tutorial_channel):
     client.send_file(tutorial_channel, img_2)
     client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
 
-
 help_msg = '`!version` \n \n \tDisplays version of the SCURIPT_BOT \n \n`!tutorial` \n \n \tGuide to setup your sound in Discord \n \n `!join (SERVER_URL)` \n \n \tMake SCURIPT_BOT join your server!'
 
+# Commands for the bot
 @client.event
 def on_message(message):
     if message.content == '!hello':
@@ -38,18 +44,20 @@ def on_message(message):
         url = message.content.replace("!join ", "")
         client.accept_invite(url)
 
+# Event for joining members
 @client.event
 def on_member_join(member):
     server = member.server
-    client.send_message(server, 'Welcome {0} to {1.name}!'.format(member.mention(), server))
+    client.send_message(server, 'Welcome {0} to the glorious {1.name} server!'.format(member.mention(), server))
     tutorial(member)
 
+# Commandline output on startup
 @client.event
 def on_ready():
     print('Logged in as')
     print(client.user.name)
+    print('ID:')
     print(client.user.id)
     print('------')
-
 
 client.run()
