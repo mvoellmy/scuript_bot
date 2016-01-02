@@ -23,7 +23,7 @@ def tutorial(tutorial_channel):
     client.send_file(tutorial_channel, img_2)
     client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
 
-help_msg = '`!version` \n \n \tDisplays version of the SCURIPT_BOT \n \n`!tutorial` \n \n \tGuide to setup your sound in Discord \n \n `!join (SERVER_URL)` \n \n \tMake SCURIPT_BOT join your server!'
+help_msg = '`!version` \n \n \tDisplays version of the SCURIPT_BOT \n \n`!tutorial` \n \n \tGuide to setup your sound in Discord \n \n `!join (SERVER_URL)` \n \n \tMake SCURIPT_BOT join your server! \n \n `!git` \n \n \tLink to the github repo.'
 
 # Commands for the bot
 @client.event
@@ -44,6 +44,9 @@ def on_message(message):
         url = message.content.replace("!join ", "")
         client.accept_invite(url)
         client.send_message(message.channel, "SCURIPT_BOT successfully joined your channel!")
+    
+    if message.content == '!git':
+        client.send_message(message.channel, 'https://github.com/mvoellmy/scuript_bot')
 
 
 # Event for joining members
