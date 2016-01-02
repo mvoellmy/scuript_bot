@@ -1,15 +1,24 @@
 import discord
+import getpass
 
 client = discord.Client()
+'''username = input('Email:')
+password = getpass.getpass('Password:')
+client.login(username, password)'''
+
 client.login('miro@voellmy.com', 'beep-beep')
 
-
 def tutorial(tutorial_channel):
-    tutorial_msg = "`Guide to setup your sound in Discord. \n 1. Check if your microphone is muted \n 2. Check input & output settings \n 3. Activate automatic input sensitivity`"
-    client.send_message(tutorial_channel, tutorial_msg)
+    img_1 = open('../images/tutorial/img_tutorial_000.jpg',"rb")
+    img_2 = open('../images/tutorial/img_tutorial_001.jpg',"rb")
+    client.send_message(tutorial_channel, "`Guide to setup your sound in Discord. \n1. Check if your microphone is muted \n2. Check if your headphones are deafend \n3. Enter the sound settings`")
+    client.send_file(tutorial_channel, img_1)
+    client.send_message(tutorial_channel, "`4. Set your sound input and output channels \n5. Activate automatic input sensitivity.`")
+    client.send_file(tutorial_channel, img_2)
+    client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
 
 
-help_msg = '!version \n \n     Displays version of the SCURIPT_BOT \n \n!tutorial \n \n     Guide to setup your sound in Discord'
+help_msg = '`!version` \n \n \t Displays version of the SCURIPT_BOT \n \n`!tutorial` \n \n \t Guide to setup your sound in Discord'
 
 @client.event
 def on_message(message):
