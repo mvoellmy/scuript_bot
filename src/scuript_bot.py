@@ -3,7 +3,7 @@ import discord
 client = discord.Client()
 client.login('miro@voellmy.com', 'beep-beep')
 
-tutorial_msg = 'Guide to setup your sound in Discord. \n 1. Check if your microphone is muted \n 2. Check input & output settings \n 3. Activate automatic input sensitivity'
+tutorial_msg = "'''Guide to setup your sound in Discord. \n 1. Check if your microphone is muted \n 2. Check input & output settings \n 3. Activate automatic input sensitivity'''"
 
 help_msg = '!version \n \n     Displays version of the SCURIPT_BOT \n \n!tutorial \n \n     Guide to setup your sound in Discord'
 
