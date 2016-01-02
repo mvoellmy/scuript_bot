@@ -23,7 +23,7 @@ def tutorial(tutorial_channel):
     client.send_file(tutorial_channel, img_2)
     client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
 
-help_msg = '`!version` \n \n \tDisplays version of the SCURIPT_BOT \n \n`!tutorial` \n \n \tGuide to setup your sound in Discord \n \n `!join (SERVER_URL)` \n \n \tMake SCURIPT_BOT join your server! \n \n `!git` \n \n \tLink to the github repo.'
+help_msg = '`!version` \n \n \tDisplays version of the SCURIPT_BOT \n \n`!tutorial` \n \n \tGuide to setup your sound in Discord \n \n `!join (SERVER_URL)` \n \n \tMake SCURIPT_BOT join your server! \n \n `!git` \n \n \tLink to the github repo. \n \n `!tts (TEXT)` \n \n \tLet the bot speak for you!'
 
 # Commands for the bot
 @client.event
@@ -47,6 +47,17 @@ def on_message(message):
     
     if message.content == '!git':
         client.send_message(message.channel, 'https://github.com/mvoellmy/scuript_bot')
+
+    if message.content.startswith('!tts'):
+        tts_msg = message.content.replace("!tts ", "")
+        tts_msg = 'Beep, boop. ' + tts_msg + '. Beep, boop.'
+        client.send_message(message.channel, tts_msg, True, True)
+
+    if message.content.startswith('!rekt'):
+        tts_msg = message.content.replace("!rekt ", "")
+        tts_msg = 'You have been rekt!'
+        client.send_message(message.channel, tts_msg, True, True)
+
 
 
 # Event for joining members
