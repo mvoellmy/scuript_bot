@@ -13,7 +13,7 @@ def on_message(message):
 @client.event
 def on_member_join(member):
     server = member.server
-    client.send_message(server, 'Welcome {0} to {1.name}!'.format(member.mention(), server))
+    client.send_message(member.user, 'Welcome {0} to {1.name}!'.format(member.mention(), server))
 
 @client.event
 def on_ready():
