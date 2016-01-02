@@ -14,7 +14,7 @@ SCURIPT_BOT was developed to help new users set up their microphone and headphon
 
 ### Setting up your cfg.txt
 
-Edit cfg.txt in src to match your bots credidentials.
+Add src/cfg.txt with your bots credidentials.
 
 ```
 [file]
