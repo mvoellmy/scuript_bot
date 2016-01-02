@@ -4,10 +4,13 @@ SCURIPT_BOT was developed to help new users set up their microphone and headphon
 
 ## Usage
 
-Make SCURIPT_BOT join your server by executing the following command in the SCURIPT-SERVER found at 
-
-
     !join (SERVER_URL)
+
+Makes SCURIPT_BOT join your server by executing the following command in the SCURIPT-SERVER found at 
+
+    !tutorial
+
+Sends a guide how to setup the microphone and headphones propperly.
 
     !help
 
