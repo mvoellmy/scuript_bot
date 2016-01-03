@@ -33,8 +33,8 @@ def tutorial(tutorial_channel):
 
 # Print a message
 def print_message(msg):
-    if msg.content.startswith('!search'):
-        msg.content = msg.content.replace('!search ', "¡search ")
+    #if msg.content.startswith('!search'):
+    #    msg.content = msg.content.replace('!search ', "¡search ")
     client.send_message(msg.channel, "{0} `{1}`".format(msg.author, msg.timestamp))
     client.send_message(msg.channel, "{0}".format(msg.content))
     print(msg.author)
@@ -110,7 +110,7 @@ def on_message(message):
 
         client.send_message(message.channel, game_details)
 
-    if message.content.startswith('!search') and message.author != 'SCURIPT_BOT':
+    if message.content.startswith('!search') and message.authore.lower() != 'SCURIPT_BOT'.lower():
         result_count = 0
         search_msg = message.content.replace('!search ', "")
         searched_msgs = copy.copy(client.messages)
