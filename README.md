@@ -40,6 +40,8 @@ Install the Riot API wrapper using pip:
 
 https://github.com/pseudonym117/Riot-Watcher
 
+https://developer.riotgames.com/docs/game-constants
+
 ### Setting up your cfg.txt
 
 Add src/cfg.txt with your bots credidentials.
