@@ -35,8 +35,7 @@ def tutorial(tutorial_channel):
 def print_message(msg):
     #if msg.content.startswith('!search'):
     #    msg.content = msg.content.replace('!search ', "¡search ")
-    client.send_message(msg.channel, "{0} `{1}`".format(msg.author, msg.timestamp))
-    client.send_message(msg.channel, "{0}".format(msg.content))
+    client.send_message(msg.channel, "---------------------------------------\n{0}            `{1}`\n \t``{2}``".format(msg.author, str(msg.timestamp)[:16], msg.content))
     print(msg.author)
     print(msg.content)
 
@@ -110,11 +109,11 @@ def on_message(message):
 
         client.send_message(message.channel, game_details)
 
-    if message.content.startswith('!search') and message.authore.lower() != 'SCURIPT_BOT'.lower():
+    if message.content.startswith('!search') and str(message.author).lower() != 'SCURIPT_BOT'.lower():
         result_count = 0
         search_msg = message.content.replace('!search ', "")
         searched_msgs = copy.copy(client.messages)
-        client.send_message(message.channel,'{0} messages are beeing searched'.format(len(searched_msgs)))
+        client.send_message(message.channel,'{0} messages are beeing searched!'.format(len(searched_msgs)))
         results = []
         while True:
             try:
@@ -122,10 +121,9 @@ def on_message(message):
                 print('Length of deque and searched_msgs')
                 print(len(client.messages))
                 print(len(searched_msgs))
-
-                if message.channel == it_msg.channel and search_msg in it_msg.content:
-                    results.append(it_msg)
-                    result_count = result_count + 1
+                if message.channel == it_msg.channel and str(search_msg).lower() in str(it_msg.content).lower() and str(it_msg.author).lower() != 'SCURIPT_BOT'.lower() and it_msg.content.startswith('!') is not True:
+                        results.append(it_msg)
+                        result_count = result_count + 1
 
             except IndexError:
                 break
@@ -139,7 +137,7 @@ def on_message(message):
         #Print results as one big message
         #client.send_message(message.channel,stitch_messages(results))
 
-        client.send_message(message.channel,"Successfully displayed all {0} messages".format(result_count))        
+        client.send_message(message.channel,"---------------------------------------\nSuccessfully displayed all {0} messages. Beep-Boop".format(result_count))        
 
 
 # Event for joining members
