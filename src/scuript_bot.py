@@ -1,9 +1,11 @@
+#imports
 import discord
 import getpass
 import configparser
-from collections import deque
 import copy
 import time
+
+from collections import deque
 from decimal import Decimal
 
 # Scuript Functions

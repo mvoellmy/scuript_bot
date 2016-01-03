@@ -8,7 +8,7 @@ from riotwatcher import EUROPE_WEST
 from riotwatcher import LoLException, error_404, error_429
 
 w = RiotWatcher('b6e57fc8-b03e-40ce-8c84-55d616941248', default_region=EUROPE_WEST)
-static_champ_list = w.static_get_champion_list()
+#static_champ_list = w.static_get_champion_list()
 #print(static_champ_list)
 
 #CONSTANTS
