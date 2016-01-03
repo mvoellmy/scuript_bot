@@ -38,7 +38,7 @@ def get_match_details(summoner_name):
 		if queue_type != 'None':
 			match_details['queue_type'] = queue_types.get(current_game['gameQueueConfigId'])
 			match_details['game_length'] = current_game['gameLength']/60 + 3
-			print(match_details['game_length'])
+			print(current_game['gameLength'])
 		else:
 			match_details['error'] = 'Queue type not supported or not found.' 	
 

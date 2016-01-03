@@ -1,7 +1,17 @@
 import discord
 import getpass
 import configparser
+from collections import deque
+import copy
+import time
+from decimal import Decimal
+
+# Scuript Functions
 from league_functions import get_match_details
+from search_functions import print_message
+from search_functions import stitch_messages
+
+## SCURIPT BOT ##
 
 # Read cfg.txt
 config = configparser.ConfigParser()   
@@ -23,6 +33,24 @@ def tutorial(tutorial_channel):
     client.send_file(tutorial_channel, img_2)
     client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
 
+# Print a message
+def print_message(msg):
+    if msg.content.startswith('!search'):
+        msg.content = msg.content.replace('!search ', "¡search ")
+    client.send_message(msg.channel, "{0} `{1}`".format(msg.author, msg.timestamp))
+    client.send_message(msg.channel, "{0}".format(msg.content))
+    print(msg.author)
+    print(msg.content)
+
+# Print a list of messages as one (Char limit = 2000)
+def stitch_messages(msgs):
+    single_message = 'Search Results:\n'
+    for i in range(0, len(msgs)):
+        msg = msgs[i]
+        single_message = single_message +'``'+ str(msg.author) + '``    ``' +  str(msg.timestamp) + '``\n' + str(msg.content) + '\n'
+    return single_message
+
+
 
 # Commands for the bot
 @client.event
@@ -37,7 +65,8 @@ def on_message(message):
                 "!git"      : "Link to the github repo.", 
                 "!tts"      : "Let the bot speak for you!",
                 "!rekt"     : "Get R3kt son!",
-                "!currgame" : "Check if Summoner XY is playing!"} 
+                "!currgame" : "Check if Summoner XY is playing and for how long!",
+                "!search"   : "Search the messages sent since the bot has been started."} 
 
     if message.content == '!help':       
         help_msg = "Looks like somebody needs help, lets see what we can do for you! beep-boop:\n \n"
@@ -73,15 +102,47 @@ def on_message(message):
         client.send_message(message.channel, tts_msg, True, True)
 
     if message.content.startswith('!currgame'):
-        summoner_name = message.content.replace('!currgame', "")
+        summoner_name = message.content.replace('!currgame ', "")
         match_details = get_match_details(summoner_name)
 
         if match_details.get('queue_type') != 'unknown':
-            game_details = "Summoner '{0}' is currently playing: {1} (EUW) for {2} minutes as .".format(summoner_name, match_details.get('queue_type'), match_details.get('game_length'))
+            game_details = "Summoner '{0}' is currently playing: {1} (EUW) for {2} minutes.".format(summoner_name, match_details.get('queue_type'), round(match_details.get('game_length'),2))
         else:
             game_details = "There was an issue with this summoner: '{0}'".format(summoner_name)
 
         client.send_message(message.channel, game_details)
+
+    if message.content.startswith('!search'):
+        result_count = 0
+        search_msg = message.content.replace('!search ', "")
+        searched_msgs = copy.copy(client.messages)
+        client.send_message(message.channel,'{0} messages are beeing searched'.format(len(searched_msgs)))
+        results = []
+        while True:
+            try:
+                it_msg = searched_msgs.pop()
+                print('Length of deque and searched_msgs')
+                print(len(client.messages))
+                print(len(searched_msgs))
+
+                if message.channel == it_msg.channel and search_msg in it_msg.content:
+                    results.append(it_msg)
+                    result_count = result_count + 1
+
+            except IndexError:
+                break
+        client.send_message(message.channel,"{0} matching results have been found!".format(result_count))        
+        
+        #Print results as single messages
+        for i in range(0, len(results)):
+            print_message(results[i])
+            time.sleep(1)
+
+        #Print results as one big message
+        #client.send_message(message.channel,stitch_messages(results))
+
+        client.send_message(message.channel,"Successfully displayed all {0} messages".format(result_count))        
+
 
 # Event for joining members
 @client.event
