@@ -75,7 +75,7 @@ def on_message(message):
 
     if message.content.startswith('!currgame'):
         summoner_name = message.content.replace('!currgame', "")
-        game_details = "Summoner {0} is currently Playing: {1} (EUW)".format(summoner_name, get_match_details(summoner_name))
+        game_details = "Summoner {0} is currently Playing: {1} (EUW)".format(summoner_name, get_match_details(summoner_name).get(queueTypes))
         client.send_message(message.channel, game_details)
 
 # Event for joining members

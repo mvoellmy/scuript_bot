@@ -4,6 +4,10 @@ from riotwatcher import LoLException, error_404, error_429
 
 w = RiotWatcher('b6e57fc8-b03e-40ce-8c84-55d616941248', default_region=EUROPE_WEST)
 
+match_details = {
+	'queueType'  : 0
+}
+
 
 queue_types = {
     0  : 'CUSTOM',  # Custom games
@@ -27,8 +31,8 @@ def get_match_details(summoner_name):
 		print(summoner)
 
 		current_game = w.get_current_game(summoner['id'])
-		queueType = queue_types.get(current_game['gameQueueConfigId'])
-		print(queueType)
+		match_details['queueType'] = queue_types.get(current_game['gameQueueConfigId'])
+		print(match_details['queueType'])
 
 	except LoLException as e:
 	    if e == error_429:
@@ -36,4 +40,4 @@ def get_match_details(summoner_name):
 	    elif e == error_404:
 	        print('Summoner not found.')
 
-	return queueType	
+	return match_details
