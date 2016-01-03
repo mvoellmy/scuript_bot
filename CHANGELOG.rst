@@ -8,8 +8,7 @@ TODO
 
 KNOWN BUGS
 ------------------
-* 
-
+* champion icon doesnt load on all champions, known issues on Wukong and Dr.Mundo. 
 
 NICE TO HAVE FEATURES
 ------------------
