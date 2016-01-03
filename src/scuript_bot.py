@@ -8,8 +8,6 @@ from decimal import Decimal
 
 # Scuript Functions
 from league_functions import get_match_details
-from search_functions import print_message
-from search_functions import stitch_messages
 
 ## SCURIPT BOT ##
 
@@ -112,7 +110,7 @@ def on_message(message):
 
         client.send_message(message.channel, game_details)
 
-    if message.content.startswith('!search'):
+    if message.content.startswith('!search') and message.author != 'SCURIPT_BOT':
         result_count = 0
         search_msg = message.content.replace('!search ', "")
         searched_msgs = copy.copy(client.messages)
