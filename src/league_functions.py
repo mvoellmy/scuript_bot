@@ -4,10 +4,7 @@ from riotwatcher import LoLException, error_404, error_429
 
 w = RiotWatcher('b6e57fc8-b03e-40ce-8c84-55d616941248', default_region=EUROPE_WEST)
 
-match_details = {
-	'queueType'  : 0
-}
-
+match_details = {}
 
 queue_types = {
     0  : 'CUSTOM',  # Custom games
@@ -17,6 +14,7 @@ queue_types = {
     4  : 'RANKED SOLO 5x5',  # Ranked Solo 5v5 games
     41 : 'RANKED TEAM 3x3',  # Ranked Team 3v3 games
     42 : 'RANKED TEAM 5x5',  # Ranked Team 5v5 games
+    61 : 'TEAM BUILDER 5x5', # Team Builder 5v5 games
     65 : 'ARAM 5x5',  # ARAM games
 }
 
@@ -26,13 +24,22 @@ queue_types = {
 
 
 def get_match_details(summoner_name):
+	match_details['queue_type'] = 'unknown'
+	match_details['game_length'] = 'unknown'
+
 	try:
 		summoner = w.get_summoner(name=summoner_name)
-		print(summoner)
 
 		current_game = w.get_current_game(summoner['id'])
-		match_details['queueType'] = queue_types.get(current_game['gameQueueConfigId'])
-		print(match_details['queueType'])
+		print(current_game['gameQueueConfigId'])
+
+		queue_type = queue_types.get(current_game['gameQueueConfigId'])
+		if queue_type != 'None':
+			match_details['queue_type'] = queue_types.get(current_game['gameQueueConfigId'])
+		else:
+			match_details['error'] = 'Queue type not supported or not found.' 	
+
+		print(match_details['queue_type'])
 
 	except LoLException as e:
 	    if e == error_429:
@@ -40,4 +47,5 @@ def get_match_details(summoner_name):
 	    elif e == error_404:
 	        print('Summoner not found.')
 
+	print(match_details)
 	return match_details
