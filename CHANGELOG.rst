@@ -22,3 +22,7 @@ NICE TO HAVE FEATURES
 * !help lists all available commands
 * A welcome message with instructions sends instruction how to setup the mic
 * !tutorial send the same instructions on the server 
+
+0.0.2 (2016-03-01)
+------------------
+* !currgame <summoner_name> shows the current game status of the summoner and and some basic ranked stats for the active champion.
