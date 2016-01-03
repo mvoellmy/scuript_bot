@@ -4,7 +4,7 @@ SCURIPT_BOT was developed to help new users set up their microphone and headphon
 
 ## Usage
 
-    !join (SERVER_URL)
+    !join <server_url>
 
 Makes SCURIPT_BOT join your server by executing the following command in the SCURIPT-SERVER found at:
 
@@ -17,6 +17,10 @@ Sends a guide how to setup the microphone and headphones propperly.
     !help
 
 Lists all available commands.
+
+    !currgame <summoner_name>
+
+League of Legends: Shows details to currently active game (EUW only atm)
 
 ## Installation
 
