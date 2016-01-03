@@ -77,7 +77,7 @@ def on_message(message):
         match_details = get_match_details(summoner_name)
 
         if match_details.get('queue_type') != 'unknown':
-            game_details = "Summoner '{0}' is currently playing: {1} (EUW)".format(summoner_name, match_details.get('queue_type'))
+            game_details = "Summoner '{0}' is currently playing: {1} (EUW) for {2} minutes as .".format(summoner_name, match_details.get('queue_type'), match_details.get('game_length'))
         else:
             game_details = "There was an issue with this summoner: '{0}'".format(summoner_name)
 
