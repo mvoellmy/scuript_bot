@@ -104,17 +104,28 @@ def on_message(message):
         summoner_name = message.content.replace('!currgame ', "")
         match_details = get_match_details(summoner_name)
 
+        show_champion_details = False
         if not match_details:
-            game_details = "Summoner '{0}' is currently not in a game..".format(summoner_name)
+            game_details = "`Summoner '{0}' is currently not in a game..`".format(summoner_name)
+
         elif match_details.get('queue_type') == 'unknown' and match_details.get('game_length') == 'unknown':
-           game_details = "Are you sure summoner: '{0}', is currently ingame?".format(summoner_name)   
+           game_details = "`Are you sure summoner: '{0}', is currently ingame?`".format(summoner_name)   
+
         elif match_details.get('queue_type') == 'unknown':
+            show_champion_details = True
             client.send_message(message.channel, match_details.get('champion_image'))
-            game_details = "Summoner '{0}' appears to be ingame as `{1} {2}` on (EUW) for {3} minutes. But unfortunately the game mode is: {4} :(.".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('game_length'), match_details.get('queue_type'))
+            game_details = "`Summoner '{0}' appears to be ingame as {1} {2} on (EUW) for {3} minutes. But unfortunately the game mode is: {4} :(.`".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('game_length'), match_details.get('queue_type'))
+        
         else:
+            show_champion_details = True
             client.send_message(message.channel, match_details.get('champion_image'))
-            game_details = "Summoner `'{0}'` is currently playing `{1} {2}`: `{3}` (EUW) for `{4}` minutes.".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('queue_type'), match_details.get('game_length'))
+            game_details = "`Summoner '{0}' is currently playing {1} {2}: {3} (EUW) for {4} minutes.`".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('queue_type'), match_details.get('game_length'))
+        
         client.send_message(message.channel, game_details)
+
+        if show_champion_details:
+            client.send_message(message.channel, "`\n \t Ranked stats with: {0}\n \t won: {1}\n \t lost: {2}\n \t ratio: {3}`".format(match_details.get('champion_name'), match_details.get('games_won'), match_details.get('games_lost'), match_details.get('win_ratio')))
+
 
     if message.content.startswith('!search') and str(message.author).lower() != 'SCURIPT_BOT'.lower():
         result_count = 0

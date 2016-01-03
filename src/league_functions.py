@@ -60,6 +60,7 @@ def get_match_details(summoner_name):
 		summoner_id = summoner['id']
 		current_game = w.get_current_game(summoner_id)
 		participants = current_game.get('participants', UNKNOWN)
+		print('Summoner ID: ', summoner_id)
 		print('Game queue ID: ', current_game.get('gameQueueConfigId', 'Error: No gameQueueID.'))
 		print('Game duration in seconds: ', current_game['gameLength'])
 
@@ -73,6 +74,7 @@ def get_match_details(summoner_name):
 		match_details['game_length'] = get_seconds_as_time(game_length)
 
 		#get champion info
+		champion_id = ''
 		for participant in participants:
 			if participant.get('summonerId') == summoner_id:				
 				champion_id = participant.get('championId', UNKNOWN)
@@ -81,14 +83,38 @@ def get_match_details(summoner_name):
 					champion = w.static_get_champion(champion_id)
 					image_key = champion.get('key')
 					url = DDRAGON_STATIC_URL + image_key + ".png"
-					response = requests.get(url)
-					img = Image.open(BytesIO(response.content))
+
+					try:
+						response = requests.get(url)
+						img = Image.open(BytesIO(response.content))
+					except requests.exceptions.HTTPError as e:
+						url = ''
+						print('HTTPError:', e.message)
 
 					match_details['champion_name'] = champion.get('name', '')
 					match_details['champion_title'] = champion.get('title', '')
 					match_details['champion_image'] = url
 
 					print(champion)
+
+		#ranked stats for current champion
+		ranked_stats_champions = w.get_ranked_stats(summoner_id).get('champions')
+		for rnkd_champ_stat in ranked_stats_champions:
+			if rnkd_champ_stat.get('id') == champion_id:
+				ranked_stats_current_champion = rnkd_champ_stat.get('stats')
+				print('Ranked stats for current champ: ', ranked_stats_current_champion)
+
+				games_won = ranked_stats_current_champion.get('totalSessionsWon')
+				games_lost = ranked_stats_current_champion.get('totalSessionsLost')
+
+				win_ratio = str(round(int(games_won) / (int(games_won) + int(games_lost)),2) * 100) + '%'
+
+				match_details['games_won'] = games_won
+				match_details['games_lost'] = games_lost
+				match_details['win_ratio'] = win_ratio
+
+				print('won: {0} / lost: {1}'.format(games_won,games_lost))
+				print(win_ratio)
 
 		print(match_details['queue_type'])
 
