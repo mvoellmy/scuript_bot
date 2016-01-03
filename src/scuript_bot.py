@@ -102,11 +102,16 @@ def on_message(message):
         summoner_name = message.content.replace('!currgame ', "")
         match_details = get_match_details(summoner_name)
 
-        if match_details.get('queue_type') != 'unknown':
-            game_details = "Summoner '{0}' is currently playing: {1} (EUW) for {2} minutes.".format(summoner_name, match_details.get('queue_type'), round(match_details.get('game_length'),2))
+        if not match_details:
+            game_details = "Summoner '{0}' is currently not in a game..".format(summoner_name)
+        elif match_details.get('queue_type') == 'unknown' and match_details.get('game_length') == 'unknown':
+           game_details = "Are you sure summoner: '{0}', is currently ingame?".format(summoner_name)   
+        elif match_details.get('queue_type') == 'unknown':
+            client.send_message(message.channel, match_details.get('champion_image'))
+            game_details = "Summoner '{0}' appears to be ingame as `{1} {2}` on (EUW) for {3} minutes. But unfortunately the game mode is: {4} :(.".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('game_length'), match_details.get('queue_type'))
         else:
-            game_details = "There was an issue with this summoner: '{0}'".format(summoner_name)
-
+            client.send_message(message.channel, match_details.get('champion_image'))
+            game_details = "Summoner `'{0}'` is currently playing `{1} {2}`: `{3}` (EUW) for `{4}` minutes.".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('queue_type'), match_details.get('game_length'))
         client.send_message(message.channel, game_details)
 
     if message.content.startswith('!search') and str(message.author).lower() != 'SCURIPT_BOT'.lower():
