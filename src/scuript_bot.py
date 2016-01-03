@@ -1,6 +1,7 @@
 import discord
 import getpass
 import configparser
+from league_functions import get_match_details
 
 # Read cfg.txt
 config = configparser.ConfigParser()   
@@ -36,7 +37,8 @@ def on_message(message):
                 "!join"     : "enter your (SERVER_URL)", 
                 "!git"      : "Link to the github repo.", 
                 "!tts"      : "Let the bot speak for you!",
-                "!rekt"     : "Get R3kt son!"} 
+                "!rekt"     : "Get R3kt son!",
+                "!currgame" : "Check if Summoner XY is playing!"} 
 
     if message.content == '!help':       
         help_msg = "Looks like somebody needs help, lets see what we can do for you! beep-boop:\n \n"
@@ -71,7 +73,10 @@ def on_message(message):
         tts_msg = 'You have been rekt!'
         client.send_message(message.channel, tts_msg, True, True)
 
-
+    if message.content.startswith('!currgame'):
+        summoner_name = message.content.replace('!currgame', "")
+        game_details = get_match_details(summoner_name)
+        client.send_message(message.channel, game_details)
 
 # Event for joining members
 @client.event
