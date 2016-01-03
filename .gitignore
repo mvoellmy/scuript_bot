@@ -1,2 +1,9 @@
+#Config Files
 src/cfg.txt
+
+#Riot Wrapper Files
 src/__pycache__/league_functions.cpython-35.pyc
+
+#OSX Files
+.DS_Store
+src/.DS_Store

@@ -13,7 +13,6 @@ password = config.get('file', 'password')
 client = discord.Client()
 client.login(username, password)
 
-
 # Messages
 def tutorial(tutorial_channel):
     img_1 = open('../images/tutorial/img_tutorial_000.jpg',"rb")

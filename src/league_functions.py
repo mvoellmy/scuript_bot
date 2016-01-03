@@ -16,6 +16,7 @@ queue_types = {
     42 : 'RANKED TEAM 5x5',  # Ranked Team 5v5 games
     61 : 'TEAM BUILDER 5x5', # Team Builder 5v5 games
     65 : 'ARAM 5x5',  # ARAM games
+    300: 'KING PORO 5x5' # Poroking 5v5	
 }
 
 # check if we have API calls remaining
