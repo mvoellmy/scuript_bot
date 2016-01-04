@@ -2,7 +2,7 @@
 cfg/cfg.txt
 
 #Riot Wrapper Files
-src/__pycache__/league_functions.cpython-35.pyc
+src/__pycache__/*.pyc
 
 #OSX Files
 .DS_Store
