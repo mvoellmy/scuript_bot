@@ -90,7 +90,7 @@ def get_match_details(summoner_name):
 
 					try:
 						response = requests.get(url)
-						img = Image.open(BytesIO(response.content))
+						#img = Image.open(BytesIO(response.content)) not necessary since discord can interpret image from url
 					except requests.exceptions.HTTPError as e:
 						url = ''
 						logger.debug('HTTPError:' + e.message)
