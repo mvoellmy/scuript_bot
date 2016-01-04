@@ -1,5 +1,6 @@
 import datetime
 import requests
+import logging, scuript_logger
 
 from io import BytesIO
 from PIL import Image
@@ -7,9 +8,11 @@ from riotwatcher import RiotWatcher
 from riotwatcher import EUROPE_WEST
 from riotwatcher import LoLException, error_404, error_429
 
+logger = logging.getLogger("scuript_logger")
+
 w = RiotWatcher('b6e57fc8-b03e-40ce-8c84-55d616941248', default_region=EUROPE_WEST)
 #static_champ_list = w.static_get_champion_list()
-#print(static_champ_list)
+#logger.debug(static_champ_list)
 
 #CONSTANTS
 UNKNOWN = 'unknown'
@@ -46,13 +49,13 @@ queue_types = {
 }
 
 # check if we have API calls remaining
-print(w.can_make_request())
+logger.debug('Lets check if we can make requests to the Riot API: ' + str(w.can_make_request()))
 
 def get_match_details(summoner_name):
 	match_details = {}
 
-	print('*********************************************')
-	print('Looking for match details, be patient please:')
+	logger.debug('*********************************************')
+	logger.debug('Looking for match details, be patient please:')
 
 	try:
 		#fetch summoner and current game info
@@ -60,9 +63,9 @@ def get_match_details(summoner_name):
 		summoner_id = summoner['id']
 		current_game = w.get_current_game(summoner_id)
 		participants = current_game.get('participants', UNKNOWN)
-		print('Summoner ID: ', summoner_id)
-		print('Game queue ID: ', current_game.get('gameQueueConfigId', 'Error: No gameQueueID.'))
-		print('Game duration in seconds: ', current_game['gameLength'])
+		logger.debug('Summoner ID: ' + str(summoner_id))
+		logger.debug('Game queue ID: ' + str(current_game.get('gameQueueConfigId', 'Error: No gameQueueID.')))
+		logger.debug('Game duration in seconds: ' + str(current_game['gameLength']))
 
 		#get queue type infos
 		game_queue_id = current_game.get('gameQueueConfigId', 999)
@@ -89,20 +92,20 @@ def get_match_details(summoner_name):
 						img = Image.open(BytesIO(response.content))
 					except requests.exceptions.HTTPError as e:
 						url = ''
-						print('HTTPError:', e.message)
+						logger.debug('HTTPError:' + e.message)
 
 					match_details['champion_name'] = champion.get('name', '')
 					match_details['champion_title'] = champion.get('title', '')
 					match_details['champion_image'] = url
 
-					print(champion)
+					logger.debug(champion)
 
 		#ranked stats for current champion
 		ranked_stats_champions = w.get_ranked_stats(summoner_id).get('champions')
 		for rnkd_champ_stat in ranked_stats_champions:
 			if rnkd_champ_stat.get('id') == champion_id:
 				ranked_stats_current_champion = rnkd_champ_stat.get('stats')
-				print('Ranked stats for current champ: ', ranked_stats_current_champion)
+				logger.debug('Ranked stats for current champ: %s', ranked_stats_current_champion)
 
 				games_won = ranked_stats_current_champion.get('totalSessionsWon')
 				games_lost = ranked_stats_current_champion.get('totalSessionsLost')
@@ -113,18 +116,18 @@ def get_match_details(summoner_name):
 				match_details['games_lost'] = games_lost
 				match_details['win_ratio'] = win_ratio
 
-				print('won: {0} / lost: {1}'.format(games_won,games_lost))
-				print(win_ratio)
+				logger.debug('won: {0} / lost: {1}'.format(games_won,games_lost))
+				logger.debug(win_ratio)
 
-		print(match_details['queue_type'])
+		logger.debug(match_details['queue_type'])
 
 	except LoLException as e:
 	    if e == error_429:
-	        print('We should retry in {} seconds.'.format(e.headers['Retry-After']))
+	        logger.debug('We should retry in {} seconds.'.format(e.headers['Retry-After']))
 	    elif e == error_404:
-	        print('Summoner not found.')
+	        logger.debug('Summoner not found.')
 
-	print(match_details)
+	logger.debug(match_details)
 	return match_details
 
 

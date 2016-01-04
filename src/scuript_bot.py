@@ -1,4 +1,5 @@
 #imports
+import logging, scuript_logger
 import discord
 import getpass
 import configparser
@@ -13,9 +14,11 @@ from league_functions import get_match_details
 
 ## SCURIPT BOT ##
 
+logger = logging.getLogger("scuript_logger")
+
 # Read cfg.txt
 config = configparser.ConfigParser()   
-config.read('cfg.txt')
+config.read('../cfg/cfg.txt')
 username = config.get('file', 'username')
 password = config.get('file', 'password')
 
@@ -38,8 +41,8 @@ def print_message(msg):
     #if msg.content.startswith('!search'):
     #    msg.content = msg.content.replace('!search ', "¡search ")
     client.send_message(msg.channel, "---------------------------------------\n{0}            `{1}`\n \t``{2}``".format(msg.author, str(msg.timestamp)[:16], msg.content))
-    print(msg.author)
-    print(msg.content)
+    logger.debug(msg.author)
+    logger.debug(msg.content)
 
 # Print a list of messages as one (Char limit = 2000)
 def stitch_messages(msgs):
@@ -136,9 +139,9 @@ def on_message(message):
         while True:
             try:
                 it_msg = searched_msgs.pop()
-                print('Length of deque and searched_msgs')
-                print(len(client.messages))
-                print(len(searched_msgs))
+                logger.debug('Length of deque and searched_msgs')
+                logger.debug(len(client.messages))
+                logger.debug(len(searched_msgs))
                 if message.channel == it_msg.channel and str(search_msg).lower() in str(it_msg.content).lower() and str(it_msg.author).lower() != 'SCURIPT_BOT'.lower() and it_msg.content.startswith('!') is not True:
                         results.append(it_msg)
                         result_count = result_count + 1
@@ -168,10 +171,10 @@ def on_member_join(member):
 # Commandline output on startup
 @client.event
 def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print('ID:')
-    print(client.user.id)
-    print('------')
+    logger.debug('Logged in as')
+    logger.debug(client.user.name)
+    logger.debug('ID:')
+    logger.debug(client.user.id)
+    logger.debug('------')
 
 client.run()

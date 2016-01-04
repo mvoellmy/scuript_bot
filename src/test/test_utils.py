@@ -1,4 +1,7 @@
-if 'SCURIPT_BOT'.lower() != 'SCURIPT_BOT'.lower():
-	print('something is wrong')
-else:
-	print('this works.')
+
+@Test
+def string_compare():
+	if 'SCURIPT_BOT'.lower() != 'SCURIPT_BOT'.lower():
+		print('something is wrong')
+	else:
+		print('this works.')
