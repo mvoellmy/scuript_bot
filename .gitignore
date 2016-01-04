@@ -1,5 +1,6 @@
 #Config Files
 src/cfg.txt
+op_gg_spectate_customized.bat
 
 #Riot Wrapper Files
 src/__pycache__/league_functions.cpython-35.pyc
