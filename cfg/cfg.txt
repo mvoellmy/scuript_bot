@@ -1,3 +1,0 @@
-[file]
-username= miro@voellmy.com
-password= beep-boop
