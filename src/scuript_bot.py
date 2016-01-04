@@ -78,7 +78,7 @@ def on_message(message):
         client.send_message(message.channel, 'Hello received. Thank you! beep-boop')
 
     if message.content == '!version':
-        client.send_message(message.channel, 'SCURIPT BOT VERSION 0.1!')
+        client.send_message(message.channel, 'SCURIPT BOT VERSION 0.2!')
 
     if message.content == '!tutorial':
         tutorial(message.channel)
@@ -120,11 +120,29 @@ def on_message(message):
             show_champion_details = True
             client.send_message(message.channel, match_details.get('champion_image'))
             game_details = "`Summoner '{0}' is currently playing {1} {2}: {3} (EUW) for {4} minutes.`".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('queue_type'), match_details.get('game_length'))
-        
+            
+
         client.send_message(message.channel, game_details)
 
         if show_champion_details:
             client.send_message(message.channel, "`\n \t Ranked stats with: {0}\n \t won: {1}\n \t lost: {2}\n \t ratio: {3}`".format(match_details.get('champion_name'), match_details.get('games_won'), match_details.get('games_lost'), match_details.get('win_ratio')))
+            # Specatate Mode encryption key
+            spectate_file_stream = open('op_gg_spectate_template.bat','r')
+            spectate_file_content = spectate_file_stream.read()
+            spectate_file_stream.close()
+            # Add correct encryption_key and game_id to bat file
+            spectate_file_content = spectate_file_content.replace("encryptionKeyPlaceholder", match_details.get('encryption_key'))           
+            spectate_file_content = spectate_file_content.replace("gameIdPlaceholder", str(match_details.get('game_id')))           
+
+            spectate_file_stream = open('op_gg_spectate_customized.bat','w')
+            spectate_file_stream.write(spectate_file_content)
+            spectate_file_stream.close()
+            
+            op_gg_bat = open('op_gg_spectate_customized.bat',"rb")
+            client.send_message(message.channel, 'Spectate the game by downloading and opening the following file:')          
+            client.send_file(message.channel, op_gg_bat)
+            # client.send_message(message.channel, 'Yes, Windows thinks its unsafe. \nNo, it is no virus. ;)')          
+
 
 
     if message.content.startswith('!search') and str(message.author).lower() != 'SCURIPT_BOT'.lower():

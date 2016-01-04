@@ -71,6 +71,7 @@ def get_match_details(summoner_name):
 
 		#get game duration
 		game_length = current_game.get('gameLength', UNKNOWN)
+
 		match_details['game_length'] = get_seconds_as_time(game_length)
 
 		#get champion info
@@ -117,6 +118,13 @@ def get_match_details(summoner_name):
 				print(win_ratio)
 
 		print(match_details['queue_type'])
+
+		#get encryptionKey for spectation
+		observers = current_game.get('observers', UNKNOWN)
+		match_details['encryption_key'] = observers.get('encryptionKey')
+		match_details['game_id'] = current_game.get('gameId', UNKNOWN)
+
+
 
 	except LoLException as e:
 	    if e == error_429:
