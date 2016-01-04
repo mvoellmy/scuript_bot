@@ -4,7 +4,9 @@ Changelog for SCURIPTBOT
 
 TODO
 ------------------
-* !stat to display all the status of the bot
+* !stat to display all the status of the bot		
+* implement search function for full history
+* add stats (items/kda/cs) to !currgame
 
 KNOWN BUGS
 ------------------
@@ -12,6 +14,7 @@ KNOWN BUGS
 NICE TO HAVE FEATURES
 ------------------
 * !rekt with sound
+* !runtime, time since start of bot
 
 0.0.1 (2016-02-01)
 ------------------

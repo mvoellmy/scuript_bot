@@ -14,6 +14,10 @@ htttp://discord.me/scuript_bot
 
 Sends a guide how to setup the microphone and headphones propperly.
 
+    !search <text>
+
+Searches channel history.
+
     !help
 
 Lists all available commands.
@@ -45,6 +49,12 @@ Install the Riot API wrapper using pip:
 https://github.com/pseudonym117/Riot-Watcher
 
 https://developer.riotgames.com/docs/game-constants
+
+https://developer.riotgames.com/docs/spectating-games
+
+Pillow is also needed
+
+    pip install pillow
 
 ### Setting up your cfg.txt
 
