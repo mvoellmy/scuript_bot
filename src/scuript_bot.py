@@ -1,5 +1,5 @@
 #imports
-import logging, scuript_logger
+import logging, logging.config
 import discord
 import getpass
 import configparser
@@ -9,11 +9,11 @@ import time
 from collections import deque
 from decimal import Decimal
 
-# Scuript Functions
-from league_functions import get_match_details
+# Scuript Modules
+from league_utils import get_match_details
 
 ## SCURIPT BOT ##
-
+logging.config.fileConfig('../cfg/logging.conf')
 logger = logging.getLogger("scuript_logger.bot")
 
 # Read cfg.txt
