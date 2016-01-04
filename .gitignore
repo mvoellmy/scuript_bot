@@ -7,3 +7,6 @@ src/__pycache__/*.pyc
 #OSX Files
 .DS_Store
 src/.DS_Store
+
+#Log Files
+log/*.log
