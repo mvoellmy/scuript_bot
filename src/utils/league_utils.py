@@ -1,6 +1,6 @@
 import datetime
 import requests
-import logging, scuript_logger
+import logging
 
 from io import BytesIO
 from PIL import Image
