@@ -10,6 +10,8 @@ src/__pycache__/*.pyc
 src/.DS_Store
 
 #Log Files
-log/*.log
+*.log
+
+
 *.pyc
 *.bat
