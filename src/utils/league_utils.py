@@ -88,13 +88,6 @@ def get_match_details(summoner_name):
 					image_key = champion.get('image').get('full')
 					url = populate_champion_image_url(image_key)
 
-					try:
-						response = requests.get(url)
-						#img = Image.open(BytesIO(response.content)) not necessary since discord can interpret image from url
-					except requests.exceptions.HTTPError as e:
-						url = ''
-						logger.debug('HTTPError:' + e.message)
-
 					match_details['champion_name'] = champion.get('name', '')
 					match_details['champion_title'] = champion.get('title', '')
 					match_details['champion_image'] = url
