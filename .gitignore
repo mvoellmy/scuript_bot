@@ -10,3 +10,4 @@ src/.DS_Store
 
 #Log Files
 log/*.log
+*.pyc

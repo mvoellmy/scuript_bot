@@ -1,4 +1,7 @@
 #imports
+import sys
+sys.path.append('utils/')
+
 import logging, logging.config
 import discord
 import getpass
