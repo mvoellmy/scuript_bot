@@ -4,7 +4,7 @@ Changelog for SCURIPTBOT
 
 TODO
 ------------------
-* !stat to display all the statuses of the bots
+* !stat to display all the status of the bot		
 * implement search function for full history
 * add stats (items/kda/cs) to !currgame
 
