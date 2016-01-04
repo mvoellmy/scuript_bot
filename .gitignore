@@ -1,17 +1,11 @@
 #Config Files
 cfg/cfg.txt
-op_gg_spectate_customized.bat
-
-#Riot Wrapper Files
-src/__pycache__/*.pyc
 
 #OSX Files
 .DS_Store
 src/.DS_Store
 
-#Log Files
+#Files types
 *.log
-
-
 *.pyc
 *.bat
