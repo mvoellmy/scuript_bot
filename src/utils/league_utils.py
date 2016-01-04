@@ -16,7 +16,7 @@ w = RiotWatcher('b6e57fc8-b03e-40ce-8c84-55d616941248', default_region=EUROPE_WE
 
 #CONSTANTS
 UNKNOWN = 'unknown'
-DDRAGON_STATIC_URL = 'http://ddragon.leagueoflegends.com/cdn/5.2.1/img/champion/'
+
 
 queue_types = {
     0  : 'CUSTOM',  # Custom games
@@ -86,7 +86,7 @@ def get_match_details(summoner_name):
 				if champion_id != UNKNOWN:
 					champion = w.static_get_champion(champion_id,  champ_data='image')
 					image_key = champion.get('image').get('full')
-					url = DDRAGON_STATIC_URL + image_key
+					url = populate_champion_image_url(image_key)
 
 					try:
 						response = requests.get(url)
@@ -148,3 +148,10 @@ def get_seconds_as_time(gametime_seconds):
 		duration="{0}:{1}".format(mm,ss)
 	
 	return duration
+
+def populate_champion_image_url(champion_key):
+	realm_data = w.static_get_realm()
+	url_base = realm_data['cdn']
+	current_version = realm_data['v']
+
+	return url_base + '/' + current_version + '/img/champion/' + champion_key
