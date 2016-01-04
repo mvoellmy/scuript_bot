@@ -80,9 +80,9 @@ def get_match_details(summoner_name):
 				champion_id = participant.get('championId', UNKNOWN)
 
 				if champion_id != UNKNOWN:
-					champion = w.static_get_champion(champion_id)
-					image_key = champion.get('key')
-					url = DDRAGON_STATIC_URL + image_key + ".png"
+					champion = w.static_get_champion(champion_id,  champ_data='image')
+					image_key = champion.get('image').get('full')
+					url = DDRAGON_STATIC_URL + image_key
 
 					try:
 						response = requests.get(url)
