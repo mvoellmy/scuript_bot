@@ -14,7 +14,7 @@ from league_functions import get_match_details
 
 ## SCURIPT BOT ##
 
-logger = logging.getLogger("scuript_logger")
+logger = logging.getLogger("scuript_logger.bot")
 
 # Read cfg.txt
 config = configparser.ConfigParser()   
