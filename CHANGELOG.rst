@@ -4,9 +4,10 @@ Changelog for SCURIPTBOT
 
 TODO
 ------------------
-* !stat to display all the status of the bot		
+* make !currgame work for all regions 
+* !stat to display all the statuses of the bots
 * implement search function for full history
-* add stats (items/kda/cs) to !currgame
+* add current stats (items/kda/cs) to !currgame
 
 KNOWN BUGS
 ------------------
@@ -15,6 +16,9 @@ NICE TO HAVE FEATURES
 ------------------
 * !rekt with sound
 * !runtime, time since start of bot
+* !soundtest returns voice of the person sending the command
+* Admin commands for the bot such as (!runtime, !restart, !pull, !shutdown)
+* !currgame for Steam/CSGO
 
 0.0.1 (2016-02-01)
 ------------------
@@ -31,3 +35,4 @@ NICE TO HAVE FEATURES
 ------------------
 * fixed known bug with !currgame on certain champions, icons for all champions should be displayed now.
 * added logging framework
+* search now takes whole history in to account
