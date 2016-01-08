@@ -84,7 +84,7 @@ def on_message(message):
         client.send_message(message.channel, 'Hello received. Thank you! beep-boop')
 
     if message.content == '!version':
-        client.send_message(message.channel, 'SCURIPT BOT VERSION 0.1!')
+        client.send_message(message.channel, 'SCURIPT BOT VERSION 0.0.3!')
 
     if message.content == '!tutorial':
         tutorial(message.channel)
