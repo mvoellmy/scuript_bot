@@ -189,7 +189,7 @@ def on_message(message):
         elif search_msg == 1:
             member_join = True
             client.send_message(message.channel,"Turned welcome messages on.")
-        else
+        else:
             client.send_message(message.channel,"Unvalid mbr_join argument.")
 
  
