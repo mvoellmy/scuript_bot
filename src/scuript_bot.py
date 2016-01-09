@@ -29,6 +29,8 @@ password = config.get('file', 'password')
 client = discord.Client()
 client.login(username, password)
 
+member_join = True
+
 # Messages
 def tutorial(tutorial_channel):
     img_1 = open('../images/tutorial/img_tutorial_000.jpg',"rb")
@@ -205,7 +207,7 @@ def on_message(message):
 # Event for joining members
 @client.event
 def on_member_join(member):
-    if member_join
+    if member_join == True
         server = member.server
         client.send_message(server, 'Welcome {0} to the glorious {1.name} server!'.format(member.mention(), server))
         tutorial(member)
