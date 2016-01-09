@@ -183,10 +183,10 @@ def on_message(message):
 
     if message.content.startswith('!mbr_join') and str(message.author).lower == 'SirCarfell'.lower():
         search_msg = message.content.replace('!mbr_join ', "")
-        if search_msg = 0:
+        if search_msg == 0:
             member_join = False
             client.send_message(message.channel,"Turned welcome messages off.")
-        elif search_msg = 1:
+        elif search_msg == 1:
             member_join = True
             client.send_message(message.channel,"Turned welcome messages on.")
         else
