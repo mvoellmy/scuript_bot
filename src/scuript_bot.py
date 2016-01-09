@@ -181,7 +181,7 @@ def on_message(message):
 
         client.send_message(message.channel,"---------------------------------------\nSuccessfully displayed all {0} messages. Beep-Boop".format(result_count))
 
-    if message.content.startswith('!mbr_join') and str(message.author).lower = 'SirCarfell'.lower():
+    if message.content.startswith('!mbr_join') and str(message.author).lower == 'SirCarfell'.lower():
         search_msg = message.content.replace('!mbr_join ', "")
         if search_msg = 0:
             member_join = False
