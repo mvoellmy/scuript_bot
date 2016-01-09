@@ -207,7 +207,7 @@ def on_message(message):
 # Event for joining members
 @client.event
 def on_member_join(member):
-    if member_join == True
+    if member_join == True:
         server = member.server
         client.send_message(server, 'Welcome {0} to the glorious {1.name} server!'.format(member.mention(), server))
         tutorial(member)
