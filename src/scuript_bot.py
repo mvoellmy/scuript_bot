@@ -181,12 +181,34 @@ def on_message(message):
 
         client.send_message(message.channel,"---------------------------------------\nSuccessfully displayed all {0} messages. Beep-Boop".format(result_count))
 
+    if message.content.startswith('!mbr_join') and str(message.author).lower = 'SirCarfell'.lower():
+        search_msg = message.content.replace('!mbr_join ', "")
+        if search_msg = 0:
+            member_join = False
+            client.send_message(message.channel,"Turned welcome messages off.")
+        elif search_msg = 1:
+            member_join = True
+            client.send_message(message.channel,"Turned welcome messages on.")
+        else
+            client.send_message(message.channel,"Unvalid mbr_join argument.")
+
+ 
+
+    emotes(message)
+
+'''def emotes(message):
+    emote = open('../images/emotes/',"rb")
+    client.send_message(tutorial_channel, "`Guide to setup your sound in Discord. \n1. Check if your microphone is muted \n2. Check if your headphones are deafend \n3. Enter the sound settings`")
+    client.send_file(tutorial_channel, img_1)'''
+ 
+
 # Event for joining members
 @client.event
 def on_member_join(member):
-    server = member.server
-    client.send_message(server, 'Welcome {0} to the glorious {1.name} server!'.format(member.mention(), server))
-    tutorial(member)
+    if member_join
+        server = member.server
+        client.send_message(server, 'Welcome {0} to the glorious {1.name} server!'.format(member.mention(), server))
+        tutorial(member)
 
 # Commandline output on startup
 @client.event
