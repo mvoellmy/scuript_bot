@@ -52,10 +52,12 @@ https://developer.riotgames.com/docs/game-constants
 
 https://developer.riotgames.com/docs/spectating-games
 
-Pillow is also needed
+Install following packages to run the zxLolBot
 
     pip install sleekxmpp
     pip install dnspython3
+
+https://github.com/Mathzx/zxLoLBoT
     
 ### Setting up your cfg.txt
 
