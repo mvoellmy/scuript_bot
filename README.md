@@ -54,16 +54,21 @@ https://developer.riotgames.com/docs/spectating-games
 
 Pillow is also needed
 
-    pip install pillow
-
+    pip install sleekxmpp
+    pip install dnspython3
+    
 ### Setting up your cfg.txt
 
 Add src/cfg.txt with your bots credidentials.
 
 
-    [file]
-    username= YOUR_EMAIL
-    password= YOUR_PASSWORD
+    [scuriptdiscord]
+    username_discord = youremail
+    password_discord = yourpassword
+    
+    [scuriptlol]
+    username_lol = youraccount
+    password_lol = yourpassword
 
 ### Let the magic happen
 
