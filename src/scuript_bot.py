@@ -8,6 +8,7 @@ import getpass
 import configparser
 import copy
 import time
+import zxlolbot
 
 from collections import deque
 from decimal import Decimal
@@ -22,48 +23,23 @@ logger = logging.getLogger("scuript_logger.bot")
 # Read cfg.txt
 config = configparser.ConfigParser()   
 config.read('../cfg/cfg.txt')
-username = config.get('file', 'username')
-password = config.get('file', 'password')
+username_discord = config.get('scuriptdiscord', 'username_discord')
+password_discord = config.get('scuriptdiscord', 'password_discord')
+username_lol = config.get('scuriptlol', 'username_lol')
+password_lol = config.get('scuriptlol', 'password_lol')
 
-# Connect Discord Client
+# milleniumfalcon
 client = discord.Client()
-client.login(username, password)
+server_id = '114100951719215113'
 
 member_join = True
 
-# Messages
-def tutorial(tutorial_channel):
-    img_1 = open('../images/tutorial/img_tutorial_000.jpg',"rb")
-    img_2 = open('../images/tutorial/img_tutorial_001.jpg',"rb")
-    client.send_message(tutorial_channel, "`Guide to setup your sound in Discord. \n1. Check if your microphone is muted \n2. Check if your headphones are deafend \n3. Enter the sound settings`")
-    client.send_file(tutorial_channel, img_1)
-    client.send_message(tutorial_channel, "`4. Set your sound input and output channels \n5. Activate automatic input sensitivity.`")
-    client.send_file(tutorial_channel, img_2)
-    client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
-
-# Print a message
-def print_message(msg):
-    #if msg.content.startswith('!search'):
-    #    msg.content = msg.content.replace('!search ', "¡search ")
-    client.send_message(msg.channel, "---------------------------------------\n{0}            `{1}`\n \t``{2}``".format(msg.author, str(msg.timestamp)[:16], msg.content))
-    logger.debug(msg.author)
-    logger.debug(msg.content)
-
-# Print a list of messages as one (Char limit = 2000)
-def stitch_messages(msgs):
-    single_message = 'Search Results:\n'
-    for i in range(0, len(msgs)):
-        msg = msgs[i]
-        single_message = single_message +'``'+ str(msg.author) + '``    ``' +  str(msg.timestamp) + '``\n' + str(msg.content) + '\n'
-    return single_message
-
-
-
+#########################################################################################
+# TODO add all discord related code to the scuriptdiscord class
 # Commands for the bot
 @client.event
 def on_message(message):
     placeholder = "\n \t"
-
     commands =  {"!help"    : "Displays version of the SCURIPT_BOT", 
                 "!version"  : "Look up the current version of scuript_bot!.", 
                 "!hello"    : "Say 'Hello' to scuript_bot!", 
@@ -73,9 +49,13 @@ def on_message(message):
                 "!tts"      : "Let the bot speak for you!",
                 "!rekt"     : "Get R3kt son!",
                 "!currgame" : "Check if Summoner XY is playing and for how long!",
-                "!search"   : "Search the messages sent since the bot has been started."} 
+                "!search"   : "Search the messages sent since the bot has been started."}
 
-    if message.content == '!help':       
+    if message.content == '!sclol':
+        print('I will try to send this to summoner: @fox3ye')
+        #todo send this message to summoner....
+
+    if message.content == '!help':
         help_msg = "Looks like somebody needs help, lets see what we can do for you! beep-boop:\n \n"
         for k,v in commands.items():
             help_msg+='`{0}`{1}{2}\n'.format(k, placeholder, v)
@@ -196,12 +176,11 @@ def on_message(message):
 
  
 
-    emotes(message)
-
-'''def emotes(message):
-    emote = open('../images/emotes/',"rb")
-    client.send_message(tutorial_channel, "`Guide to setup your sound in Discord. \n1. Check if your microphone is muted \n2. Check if your headphones are deafend \n3. Enter the sound settings`")
-    client.send_file(tutorial_channel, img_1)'''
+#emotes(message)
+#'''def emotes(message):
+#    emote = open('../images/emotes/',"rb")
+#    client.send_message(tutorial_channel, "`Guide to setup your sound in Discord. \n1. Check if your microphone is muted \n2. Check if your headphones are deafend \n3. Enter the sound settings`")
+#    client.send_file(tutorial_channel, img_1)'''
  
 
 # Event for joining members
@@ -221,4 +200,65 @@ def on_ready():
     logger.debug(client.user.id)
     logger.debug('------')
 
-client.run()
+#########################################################################################
+
+class scuriptlol(zxlolbot.zxLoLBoT):
+    def __init__(self, username, password, region="EUW"):
+        zxlolbot.zxLoLBoT.__init__(self, username, password, region)
+        self.add_event_handler("message", self.on_message)
+
+    def on_message(self, args):
+        """Handler for the message event.
+        args is a dictionary with specific keys.
+        args["sender"]  - The JID of the person the message is coming from.
+        args["message"] - The message.
+        args["summoner_id"] - The summoner ID of the person the message is coming from."""
+        print(args["summoner_id"] + " said " + args["message"])
+        self.message(args["sender"], args["message"], False)
+
+    @zxlolbot.botcommand
+    def discord(self, sender, args):
+        """chat with the glorious milleniumfalcon"""
+        self.message(sender, 'Communicating with the milleniumfalcon....')
+        client.send_message(client.get_channel(server_id), args)
+
+#########################################################################################
+
+#Helper Functions --> should be moved to a utils.py in the utils folder
+# Messages
+def tutorial(tutorial_channel):
+    img_1 = open('../images/tutorial/img_tutorial_000.jpg',"rb")
+    img_2 = open('../images/tutorial/img_tutorial_001.jpg',"rb")
+    client.send_message(tutorial_channel, "`Guide to setup your sound in Discord. \n1. Check if your microphone is muted \n2. Check if your headphones are deafend \n3. Enter the sound settings`")
+    client.send_file(tutorial_channel, img_1)
+    client.send_message(tutorial_channel, "`4. Set your sound input and output channels \n5. Activate automatic input sensitivity.`")
+    client.send_file(tutorial_channel, img_2)
+    client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
+
+# Print a message
+def print_message(msg):
+    #if msg.content.startswith('!search'):
+    #    msg.content = msg.content.replace('!search ', "¡search ")
+    client.send_message(msg.channel, "---------------------------------------\n{0}            `{1}`\n \t``{2}``".format(msg.author, str(msg.timestamp)[:16], msg.content))
+    logger.debug(msg.author)
+    logger.debug(msg.content)
+
+# Print a list of messages as one (Char limit = 2000)
+def stitch_messages(msgs):
+    single_message = 'Search Results:\n'
+    for i in range(0, len(msgs)):
+        msg = msgs[i]
+        single_message = single_message +'``'+ str(msg.author) + '``    ``' +  str(msg.timestamp) + '``\n' + str(msg.content) + '\n'
+    return single_message
+
+#########################################################################################
+
+if __name__ == "__main__":
+    # zxlolbot
+    scuriptlol = scuriptlol(username_lol, password_lol)
+    scuriptlol.connect()
+    scuriptlol.set_status(level=30, status_msg="very scuript, much wow!")
+
+    # discord client
+    client.login(username_discord, password_discord)
+    client.run()
