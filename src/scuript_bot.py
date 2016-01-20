@@ -9,6 +9,7 @@ import configparser
 import copy
 import time
 import zxlolbot
+import os.path
 
 from collections import deque
 from decimal import Decimal
@@ -49,7 +50,8 @@ def on_message(message):
                 "!tts"      : "Let the bot speak for you!",
                 "!rekt"     : "Get R3kt son!",
                 "!currgame" : "Check if Summoner XY is playing and for how long!",
-                "!search"   : "Search the messages sent since the bot has been started."}
+                "!search"   : "Search the messages sent since the bot has been started.",
+                "!callouts" : "get a callouts-map for the map."}
 
     if message.content == '!sclol':
         print('I will try to send this to summoner: @fox3ye')
@@ -174,14 +176,21 @@ def on_message(message):
         else:
             client.send_message(message.channel,"Unvalid mbr_join argument.")
 
- 
+    if message.content.startswith('!callouts'):
+        message.content = message.content.replace('!callouts ', "")
+        message.content = message.content.replace('de_',"")
+        message.content = message.content.replace('ar_',"")
+        message.content = message.content.replace('cs_',"")
 
-#emotes(message)
-#'''def emotes(message):
-#    emote = open('../images/emotes/',"rb")
-#    client.send_message(tutorial_channel, "`Guide to setup your sound in Discord. \n1. Check if your microphone is muted \n2. Check if your headphones are deafend \n3. Enter the sound settings`")
-#    client.send_file(tutorial_channel, img_1)'''
- 
+        callouts_path = ('../images/callouts/map_name_placeholder.jpg')
+        callouts_path = callouts_path.replace('map_name_placeholder', message.content)
+        
+        if os.path.isfile(callouts_path):
+            callouts_map = open(callouts_path,"rb")
+            client.send_message(message.channel, "`Callouts for {0}:`".format(message.content))
+            client.send_file(message.channel, callouts_map)
+        else:
+            client.send_message(message.channel, "No callouts-map was found for '{0}.'".format(message.content))
 
 # Event for joining members
 @client.event
@@ -199,6 +208,7 @@ def on_ready():
     logger.debug('ID:')
     logger.debug(client.user.id)
     logger.debug('------')
+    print('Scuript_Bot started successfully.')
 
 #########################################################################################
 

@@ -5,9 +5,16 @@ Changelog for SCURIPTBOT
 TODO
 ------------------
 * make !currgame work for all regions 
-* !stat to display all the statuses of the bots
+* !stat to display all the statuses of t he bots
 * implement search function for full history
 * add current stats (items/kda/cs) to !currgame
+* add option to disable features as admin
+* add sound board
+* search should only display the first 5 elements or send a private message
+* search should print in a single message instead of multiple small ones
+* change scuript-bot game
+* add send_typing(destination) to search
+* add twitch emotes
 
 KNOWN BUGS
 ------------------
