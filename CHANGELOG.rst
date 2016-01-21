@@ -4,16 +4,20 @@ Changelog for SCURIPTBOT
 
 TODO
 ------------------
-* make !currgame work for all regions 
-* !stat to display all the statuses of t he bots
+* clean up the code/create code structure.
+* implement permission structure (Admin/Mod)
+* !flush to clean up the chat history
+
+  - !flush -bot to clean the bot messages
+  - !flush -commands to clean all messages starting with a "!"
+  - !flush -1000 Number of messages which should be deleted. Default=100
+* make !currgame work for all regions
 * add current stats (items/kda/cs) to !currgame
 * add option to disable features as admin
-* add sound board
 * search should only display the first 5 elements or send a private message
 * search should print in a single message instead of multiple small ones
-* change scuript-bot game
+* change scuript-bot game to something funny :^)
 * add send_typing(destination) to search
-* add twitch emotes
 
 KNOWN BUGS
 ------------------
@@ -25,6 +29,10 @@ NICE TO HAVE FEATURES
 * !soundtest returns voice of the person sending the command
 * Admin commands for the bot such as (!runtime, !restart, !pull, !shutdown)
 * !currgame for Steam/CSGO
+* add sound board
+* !stat to display all the statuses of t he bots
+* add twitch emotes
+
 
 0.0.1 (2016-02-01)
 ------------------
@@ -42,4 +50,4 @@ NICE TO HAVE FEATURES
 * fixed known bug with !currgame on certain champions, icons for all champions should be displayed now.
 * added logging framework
 * search now takes whole history in to account
-* !callouts <map_name> send image with callouts for cs go
+* !callouts <map_name> sends image with callouts for cs go
