@@ -10,6 +10,7 @@ import copy
 import time
 import zxlolbot
 import os.path
+import random
 
 from collections import deque
 from decimal import Decimal
@@ -34,6 +35,7 @@ client = discord.Client()
 server_id = '114100951719215113'
 
 member_join = True
+
 
 #########################################################################################
 # TODO add all discord related code to the scuriptdiscord class
@@ -78,6 +80,12 @@ def on_message(message):
         client.accept_invite(url)
         client.send_message(message.channel, "SCURIPT_BOT successfully joined your channel!")
     
+    if message.content.startswith('!set_game') and is_admin(message.author):
+        game_name = str(message.content.replace('!set_game ',''))
+        scuript_bot_game.set_name(game_name)
+        client.change_status(scuript_bot_game, False)
+        #client.send_message(message.channel, 'The bot game has been successfully changed to {0}.'.format(game.name))
+
     if message.content == '!git':
         client.send_message(message.channel, 'https://github.com/mvoellmy/scuript_bot')
 
@@ -87,8 +95,19 @@ def on_message(message):
         client.send_message(message.channel, tts_msg, True, True)
 
     if message.content.startswith('!rekt'):
-        tts_msg = 'You have been rekt!'
+        tts_msg = 'You got rekt, son!'
         client.send_message(message.channel, tts_msg, True, True)
+        img_num = str(random.randint(1,25))
+        
+
+        rekt_path = ('../images/rekt/rekt_img_num_placeholder.jpg')
+        rekt_path = rekt_path.replace('img_num_placeholder', img_num)
+
+        if os.path.isfile(rekt_path):
+            rekt_img = open(rekt_path,"rb")
+            client.send_file(message.channel, rekt_img)
+        else:
+            client.send_message(message.channel, "No image was found with the name 'rekt_{0}.jpg'".format(img_num))
 
     if message.content.startswith('!currgame'):
         summoner_name = message.content.replace('!currgame ', "")
@@ -143,7 +162,7 @@ def on_message(message):
         before_msg = message
         results = []
 
-
+        client.send_typing(message.channel)
         for request in range(0, number_of_requests):
             search_messages = client.logs_from(message.channel, 100, before_msg)
             for it_msg in search_messages:
@@ -165,7 +184,7 @@ def on_message(message):
 
         client.send_message(message.channel,"---------------------------------------\nSuccessfully displayed all {0} messages. Beep-Boop".format(result_count))
 
-    if message.content.startswith('!mbr_join') and str(message.author).lower == 'SirCarfell'.lower():
+    if message.content.startswith('!mbr_join') and is_admin(message.author):
         search_msg = message.content.replace('!mbr_join ', "")
         if search_msg == 0:
             member_join = False
@@ -192,6 +211,55 @@ def on_message(message):
         else:
             client.send_message(message.channel, "No callouts-map was found for '{0}.'".format(message.content))
 
+    if message.content.startswith('!cleanup') and is_admin(message.author):
+
+        _bot = False
+        _commands = False
+        _self = False
+        _all = False 
+
+        number_of_requests = 1
+
+
+        if '-bot' in message.content:
+            _bot = True
+        
+        if '-commands' in message.content:
+            _commands = True
+        
+        if '-self' in message.content:
+            _self = True
+
+        if '-all' in message.content:
+            _all = True
+
+        result_count = 0
+        search_count = 0
+        before_msg = message
+
+        client.send_typing(message.channel)
+
+        for request in range(0, number_of_requests):
+            search_messages = client.logs_from(message.channel, 100, before_msg)
+            for it_msg in search_messages:
+                search_count = search_count + 1
+                if _bot and str(it_msg.author).lower() == 'SCURIPT_BOT'.lower():
+                    client.delete_message(it_msg)
+                    result_count = result_count + 1
+                elif _commands and it_msg.content.startswith('!'):
+                    client.delete_message(it_msg)
+                    result_count = result_count + 1    
+                elif _self and str(it_msg.author).lower() == str(message.author.lower()):
+                    client.delete_message(it_msg)
+                    result_count = result_count + 1
+                elif _all:
+                    client.delete_message(it_msg)
+                    result_count = result_count + 1
+
+            before_msg = it_msg
+
+        client.send_message(message.channel,"{0} matching results have been deleted! ({0}/{1})".format(result_count, search_count))
+
 # Event for joining members
 @client.event
 def on_member_join(member):
@@ -208,6 +276,10 @@ def on_ready():
     logger.debug('ID:')
     logger.debug(client.user.id)
     logger.debug('------')
+    # Set Default Game of Scuript Bot
+    scuript_bot_game = game('with your feelings.') 
+    client.change_status(scuript_bot_game, False)
+
     print('Scuript_Bot started successfully.')
 
 #########################################################################################
@@ -231,6 +303,12 @@ class scuriptlol(zxlolbot.zxLoLBoT):
         """chat with the glorious milleniumfalcon"""
         self.message(sender, 'Communicating with the milleniumfalcon....')
         client.send_message(client.get_channel(server_id), args)
+
+class game(object):
+    def __init__(self, game_name):
+        self.set_name(game_name)
+    def set_name(self,game_name):
+        self.name = game_name
 
 #########################################################################################
 
@@ -260,6 +338,14 @@ def stitch_messages(msgs):
         msg = msgs[i]
         single_message = single_message +'``'+ str(msg.author) + '``    ``' +  str(msg.timestamp) + '``\n' + str(msg.content) + '\n'
     return single_message
+
+# Check if someone is Admin or not.
+def is_admin(author):
+    if str(author).lower() == 'SirCarfell'.lower() or str(author).lower() == 'ilakarsu'.lower() or str(author).lower == 'SCURIPT_BOT'.lower():
+        return True
+    else:
+        return False
+
 
 #########################################################################################
 

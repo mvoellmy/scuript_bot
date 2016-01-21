@@ -5,20 +5,12 @@ Changelog for SCURIPTBOT
 TODO
 ------------------
 * clean up the code/create code structure.
-* add version number, api keys, etc to an external init.txt file.
+* add version number, api keys, default_game etc. to an external init.txt file.
 * implement permission structure (Admin/Mod)
-* !flush to clean up the chat history
-
-  - !flush -bot to clean the bot messages
-  - !flush -commands to clean all messages starting with a "!"
-  - !flush -1000 Number of messages which should be deleted. Default=100
-* make !currgame work for all regions
-* add current stats (items/kda/cs) to !currgame
+* !cleanup -num <number_of_messages> Number of messages which should be deleted default=100
 * add option to disable features as admin
 * search should only display the first 5 elements or send a private message
 * search should print in a single message instead of multiple small ones
-* change scuript-bot game to something funny :^)
-* add send_typing(destination) to search
 
 KNOWN BUGS
 ------------------
@@ -33,7 +25,8 @@ NICE TO HAVE FEATURES
 * add sound board
 * !stat to display all the statuses of t he bots
 * add twitch emotes
-
+* make !currgame work for all regions
+* add current stats (items/kda/cs) to !currgame
 
 0.0.1 (2016-02-01)
 ------------------
@@ -52,3 +45,13 @@ NICE TO HAVE FEATURES
 * added logging framework
 * search now takes whole history in to account
 * !callouts <map_name> sends image with callouts for cs go
+* !set_game <game_name> changes scuript-bot game 
+* added send_typing(destination) to search
+* added images to !rekt
+* !cleanup to clean up the chat history
+  - !cleanup -bot to clean the bot messages
+  - !cleanup -commands to clean all messages starting with a "!"
+  - !cleanup -self cleans history of message_sender
+  - !cleanup -all
+
+
