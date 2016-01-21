@@ -5,6 +5,7 @@ Changelog for SCURIPTBOT
 TODO
 ------------------
 * clean up the code/create code structure.
+* add version number, api keys, etc to an external init.txt file.
 * implement permission structure (Admin/Mod)
 * !flush to clean up the chat history
 
