@@ -6,7 +6,6 @@ TODO
 ------------------
 * make !currgame work for all regions 
 * !stat to display all the statuses of t he bots
-* implement search function for full history
 * add current stats (items/kda/cs) to !currgame
 * add option to disable features as admin
 * add sound board
@@ -43,3 +42,4 @@ NICE TO HAVE FEATURES
 * fixed known bug with !currgame on certain champions, icons for all champions should be displayed now.
 * added logging framework
 * search now takes whole history in to account
+* !callouts <map_name> send image with callouts for cs go
