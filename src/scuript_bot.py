@@ -36,7 +36,6 @@ server_id = '114100951719215113'
 
 member_join = True
 
-
 #########################################################################################
 # TODO add all discord related code to the scuriptdiscord class
 # Commands for the bot
@@ -81,9 +80,10 @@ def on_message(message):
         client.send_message(message.channel, "SCURIPT_BOT successfully joined your channel!")
     
     if message.content.startswith('!set_game') and is_admin(message.author):
+        scuript_bot_game = game('with your feelings...') 
         game_name = str(message.content.replace('!set_game ',''))
         scuript_bot_game.set_name(game_name)
-        client.change_status(scuript_bot_game, False)
+        client.change_status(scuript_bot_game)
         #client.send_message(message.channel, 'The bot game has been successfully changed to {0}.'.format(game.name))
 
     if message.content == '!git':
@@ -172,17 +172,17 @@ def on_message(message):
                     result_count = result_count + 1
             before_msg = it_msg
 
-        client.send_message(message.channel,"{0} matching results have been found! ({0}/{1})".format(result_count, search_count))        
+        client.send_message(message.author,"{0} matching results have been found in the {0} channel! ({1}/{2})".format(message.channel.name, result_count, search_count))        
         
         #Print results as single messages
-        for i in range(0, len(results)):
-            print_message(results[i])
-            time.sleep(1)
+        #for i in range(0, len(results)):
+        #    print_message(results[i])
+        #    time.sleep(1)
 
         #Print results as one big message
-        #client.send_message(message.channel,stitch_messages(results))
-
-        client.send_message(message.channel,"---------------------------------------\nSuccessfully displayed all {0} messages. Beep-Boop".format(result_count))
+        stitched_message = stitch_messages(results)
+        client.send_message(message.author, stitched_message)
+        client.send_message(message.author,"---------------------------------------\nSuccessfully displayed all {0} messages. Beep-Boop".format(result_count))
 
     if message.content.startswith('!mbr_join') and is_admin(message.author):
         search_msg = message.content.replace('!mbr_join ', "")
@@ -220,7 +220,6 @@ def on_message(message):
 
         number_of_requests = 1
 
-
         if '-bot' in message.content:
             _bot = True
         
@@ -255,7 +254,6 @@ def on_message(message):
                 elif _all:
                     client.delete_message(it_msg)
                     result_count = result_count + 1
-
             before_msg = it_msg
 
         client.send_message(message.channel,"{0} matching results have been deleted! ({0}/{1})".format(result_count, search_count))
@@ -276,10 +274,10 @@ def on_ready():
     logger.debug('ID:')
     logger.debug(client.user.id)
     logger.debug('------')
-    # Set Default Game of Scuript Bot
-    scuript_bot_game = game('with your feelings.') 
-    client.change_status(scuript_bot_game, False)
 
+    # Set Default Game of Scuript Bot
+    scuript_bot_game = game('with your feelings...') 
+    client.change_status(scuript_bot_game, False)
     print('Scuript_Bot started successfully.')
 
 #########################################################################################
@@ -327,7 +325,7 @@ def tutorial(tutorial_channel):
 def print_message(msg):
     #if msg.content.startswith('!search'):
     #    msg.content = msg.content.replace('!search ', "¡search ")
-    client.send_message(msg.channel, "---------------------------------------\n{0}            `{1}`\n \t``{2}``".format(msg.author, str(msg.timestamp)[:16], msg.content))
+    client.send_message(msg.channel, "---------------------------------------\n {0} `{1}`\n \t``{2}``".format(msg.author, str(msg.timestamp)[:16], msg.content))
     logger.debug(msg.author)
     logger.debug(msg.content)
 
@@ -336,7 +334,7 @@ def stitch_messages(msgs):
     single_message = 'Search Results:\n'
     for i in range(0, len(msgs)):
         msg = msgs[i]
-        single_message = single_message +'``'+ str(msg.author) + '``    ``' +  str(msg.timestamp) + '``\n' + str(msg.content) + '\n'
+        single_message = single_message + "---------------------------------------\n" + str(msg.author) + '            `' + str(msg.timestamp)[:16] + '`\n \t`' + str(msg.content) + '`\n'
     return single_message
 
 # Check if someone is Admin or not.
@@ -354,6 +352,7 @@ if __name__ == "__main__":
     scuriptlol = scuriptlol(username_lol, password_lol)
     scuriptlol.connect()
     scuriptlol.set_status(level=30, status_msg="very scuript, much wow!")
+
 
     # discord client
     client.login(username_discord, password_discord)

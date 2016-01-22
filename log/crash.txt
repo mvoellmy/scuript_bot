@@ -1,0 +1,50 @@
+C:\Users\Miro\Documents\scuript_bot\src>python scuript_bot.py
+Scuript_Bot started successfully.
+Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 529, in dispatch
+    getattr(self, event_method, utils._null_event)(*args, **kwargs)
+  File "scuript_bot.py", line 183, in on_message
+    client.send_message(message.channel, stitch_messages(results))
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 661, in send_message
+    utils._verify_successful_response(response)
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\utils.py", line 67, in _verify_successful_response
+    raise HTTPException(response)
+discord.errors.HTTPException: Internal Server Error (status code: 500): content is longer than 2000 characters
+Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 529, in dispatch
+    getattr(self, event_method, utils._null_event)(*args, **kwargs)
+  File "scuript_bot.py", line 79, in on_message
+    client.accept_invite(url)
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 1235, in accept_invite
+    utils._verify_successful_response(response)
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\utils.py", line 67, in _verify_successful_response
+    raise HTTPException(response)
+discord.errors.HTTPException: Not Found (status code: 404)
+Ignoring exception in on_message
+Traceback (most recent call last):
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 529, in dispatch
+    getattr(self, event_method, utils._null_event)(*args, **kwargs)
+  File "scuript_bot.py", line 79, in on_message
+    client.accept_invite(url)
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 1235, in accept_invite
+    utils._verify_successful_response(response)
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\utils.py", line 67, in _verify_successful_response
+    raise HTTPException(response)
+discord.errors.HTTPException: Not Found (status code: 404)
+Traceback (most recent call last):
+  File "scuript_bot.py", line 359, in <module>
+    client.login(username_discord, password_discord)
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 550, in run
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\ws4py\websocket.py", line 427, in run
+    if not self.once():
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\ws4py\websocket.py", line 305, in once
+    if not self.process(b):
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\ws4py\websocket.py", line 377, in process
+    self.received_message(s.message)
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 129, in received_message
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 527, in dispatch
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 535, in handle_socket_update
+  File "C:\Users\Miro\AppData\Local\Programs\Python\Python35-32\lib\site-packages\discord.py-0.9.1-py3.5.egg\discord\client.py", line 262, in handle_guild_member_add
+TypeError: type object got multiple values for keyword argument 'mute'

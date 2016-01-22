@@ -9,11 +9,12 @@ TODO
 * implement permission structure (Admin/Mod)
 * !cleanup -num <number_of_messages> Number of messages which should be deleted default=100
 * add option to disable features as admin
-* search should only display the first 5 elements or send a private message
-* search should print in a single message instead of multiple small ones
 
 KNOWN BUGS
 ------------------
+* crashes randomly with the error message in /log/crash.txt
+* if search result is longer than 2000 chars it crashes
+
 
 NICE TO HAVE FEATURES
 ------------------
@@ -53,5 +54,7 @@ NICE TO HAVE FEATURES
   - !cleanup -commands to clean all messages starting with a "!"
   - !cleanup -self cleans history of message_sender
   - !cleanup -all
-
-
+* !search sends the results via private message
+* !search prints in a single message instead of multiple small ones
+* !is_admin returns true if author is SirCarfell, ilakarsu or Scuript_Bot
+* !rekt now send images of dank memes
