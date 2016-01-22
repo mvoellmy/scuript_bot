@@ -8,4 +8,5 @@ src/.DS_Store
 #Files types
 *.log
 *.pyc
-*.bat
+
+src/op_gg_spectate_customized.bat
