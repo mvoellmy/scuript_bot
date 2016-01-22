@@ -10,3 +10,4 @@ src/.DS_Store
 *.pyc
 
 src/op_gg_spectate_customized.bat
+src/op_gg_spectate_customized
