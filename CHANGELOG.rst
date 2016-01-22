@@ -13,8 +13,6 @@ TODO
 KNOWN BUGS
 ------------------
 * crashes randomly with the error message in /log/crash.txt
-* if search result is longer than 2000 chars it crashes
-
 
 NICE TO HAVE FEATURES
 ------------------
@@ -58,3 +56,5 @@ NICE TO HAVE FEATURES
 * !search prints in a single message instead of multiple small ones
 * !is_admin returns true if author is SirCarfell, ilakarsu or Scuript_Bot
 * !rekt now send images of dank memes
+* !search now send messages in chunks smaller than the 2000 char limit but stitches the result together
+* -here and -any options were added to !search

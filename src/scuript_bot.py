@@ -55,31 +55,42 @@ def on_message(message):
                 "!callouts" : "get a callouts-map for the map."}
 
     if message.content == '!sclol':
+        logger.debug('I am in !sclol')
         print('I will try to send this to summoner: @fox3ye')
         #todo send this message to summoner....
 
     if message.content == '!help':
+        logger.debug('I am in !help')
         help_msg = "Looks like somebody needs help, lets see what we can do for you! beep-boop:\n \n"
         for k,v in commands.items():
             help_msg+='`{0}`{1}{2}\n'.format(k, placeholder, v)
 
         client.send_message(message.channel, help_msg)
 
+
     if message.content == '!hello':
+        logger.debug('I am in !hello')
         client.send_message(message.channel, 'Hello received. Thank you! beep-boop')
 
+
     if message.content == '!version':
+        logger.debug('I am in !version')        
         client.send_message(message.channel, 'SCURIPT BOT VERSION 0.0.3!')
+ 
 
     if message.content == '!tutorial':
+        logger.debug('I am in !tutorial')
         tutorial(message.channel)
 
     if message.content.startswith('!join'):
+        logger.debug('I am in !join')
         url = message.content.replace("!join ", "")
         client.accept_invite(url)
         client.send_message(message.channel, "SCURIPT_BOT successfully joined your channel!")
+
     
     if message.content.startswith('!set_game') and is_admin(message.author):
+        logger.debug('I am in !set_game')
         scuript_bot_game = game('with your feelings...') 
         game_name = str(message.content.replace('!set_game ',''))
         scuript_bot_game.set_name(game_name)
@@ -87,19 +98,37 @@ def on_message(message):
         #client.send_message(message.channel, 'The bot game has been successfully changed to {0}.'.format(game.name))
 
     if message.content == '!git':
+        logger.debug('I am in !git')
         client.send_message(message.channel, 'https://github.com/mvoellmy/scuript_bot')
 
     if message.content.startswith('!tts'):
+        logger.debug('I am in !tts')
         tts_msg = message.content.replace("!tts ", "")
         tts_msg = 'Beep, boop. ' + tts_msg + '. Beep, boop.'
         client.send_message(message.channel, tts_msg, True, True)
 
     if message.content.startswith('!rekt'):
-        tts_msg = 'You got rekt, son!'
-        client.send_message(message.channel, tts_msg, True, True)
-        img_num = str(random.randint(1,150))
-        
+        logger.debug('I am in !rekt')
 
+        rekt_list = ['You got rekt, son!',
+                     'Lol. Rekt!',
+                     'Damn son. Get rekt!',
+                     'U wot mate?',
+                     'You sir just experienced a wreckoning!',
+                     'REKT! REKT! REKT!',
+                     'Get noscoped bitch!',
+                     'Mom get the camera!',
+                     'rekekekekekekekeket!',
+                     'hue hue hue hue. Morde es numero uno.',
+                     'Get rekt, son!',
+                     'Rekt!',
+                     'Get rekt, biatch!']
+
+        tts_msg = random.choice(rekt_list)
+
+        client.send_message(message.channel, tts_msg, True, True)
+
+        img_num = str(random.randint(1,150))
         rekt_path = ('../images/rekt/rekt_img_num_placeholder.jpg')
         rekt_path = rekt_path.replace('img_num_placeholder', img_num)
 
@@ -110,6 +139,7 @@ def on_message(message):
             client.send_message(message.channel, "No image was found with the name 'rekt_{0}.jpg'".format(img_num))
 
     if message.content.startswith('!currgame'):
+        logger.debug('I am in !currgame')
         summoner_name = message.content.replace('!currgame ', "")
         match_details = get_match_details(summoner_name)
 
@@ -155,36 +185,65 @@ def on_message(message):
 
 
     if message.content.startswith('!search') and str(message.author).lower() != 'SCURIPT_BOT'.lower():
+        logger.debug('I am in !search')
+        #string.split(s[, sep[, maxsplit]])
+        
         number_of_requests = 10;
         result_count = 0
         search_count = 0
-        search_msg = message.content.replace('!search ', "")
-        before_msg = message
+        search_list = []
         results = []
+        single_message_array = []
+
+        _any = False
+
+        search_msg = message.content.replace('!search ', "")
+        search_list = search_msg.split()
+        before_msg = message
+
+        destination = message.author
+
+        if '-here' in search_list:
+            destination = message.channel
+            search_list.remove('-here')
+
+        if '-any' in search_list:
+            _any = True
+            search_list.remove('-any')
 
         client.send_typing(message.channel)
         for request in range(0, number_of_requests):
             search_messages = client.logs_from(message.channel, 100, before_msg)
             for it_msg in search_messages:
                 search_count = search_count + 1
-                if str(search_msg).lower() in str(it_msg.content).lower() and str(it_msg.author).lower() != 'SCURIPT_BOT'.lower() and it_msg.content.startswith('!') is not True:
+                if all(x.lower() in str(it_msg.content).lower() for x in search_list) and str(it_msg.author).lower() != 'SCURIPT_BOT'.lower() and it_msg.content.startswith('!') is not True:
                     results.append(it_msg)
                     result_count = result_count + 1
+
+                elif _any and any(x.lower() in str(it_msg.content).lower() for x in search_list) and str(it_msg.author).lower() != 'SCURIPT_BOT'.lower() and it_msg.content.startswith('!') is not True:
+                    results.append(it_msg)
+                    result_count = result_count + 1
+
             before_msg = it_msg
 
-        client.send_message(message.author,"{0} matching results have been found in the {0} channel! ({1}/{2})".format(message.channel.name, result_count, search_count))        
-        
-        #Print results as single messages
-        #for i in range(0, len(results)):
-        #    print_message(results[i])
-        #    time.sleep(1)
 
-        #Print results as one big message
-        stitched_message = stitch_messages(results)
-        client.send_message(message.author, stitched_message)
-        client.send_message(message.author,"---------------------------------------\nSuccessfully displayed all {0} messages. Beep-Boop".format(result_count))
+        # Print Results
+        if result_count > 1:
+            single_message_array = stitch_messages(results)
+            single_message_array.append('---------------------------------------\n{1} matching results have been found in the {0} channel of the {3}! ({1}/{2})'.format(message.channel.name, result_count, search_count, message.channel.server.name))
+        elif result_count == 1:
+            single_message_array = stitch_messages(results)
+            single_message_array.append('---------------------------------------\n{1} matching result has been found in the {0} channel of the {3}! ({1}/{2})'.format(message.channel.name, result_count, search_count, message.channel.server.name))
+        else:
+            single_message_array.append('---------------------------------------\nNo matching result have been found in the {0} channel of the {3}! ({1}/{2}\nTry !help <search_text> -any to search if any words of your search can be found.)'.format(message.channel.name, result_count, search_count, message.channel.server.name))
+
+        for single_message in single_message_array:
+            client.send_message(destination, single_message)
+
+
 
     if message.content.startswith('!mbr_join') and is_admin(message.author):
+        logger.debug('I am in !mbr_join')
         search_msg = message.content.replace('!mbr_join ', "")
         if search_msg == 0:
             member_join = False
@@ -196,6 +255,7 @@ def on_message(message):
             client.send_message(message.channel,"Unvalid mbr_join argument.")
 
     if message.content.startswith('!callouts'):
+        logger.debug('I am in !callouts')
         message.content = message.content.replace('!callouts ', "")
         message.content = message.content.replace('de_',"")
         message.content = message.content.replace('ar_',"")
@@ -212,6 +272,7 @@ def on_message(message):
             client.send_message(message.channel, "No callouts-map was found for '{0}.'".format(message.content))
 
     if message.content.startswith('!cleanup') and is_admin(message.author):
+        logger.debug('I am in !cleanup')
 
         _bot = False
         _commands = False
@@ -331,11 +392,21 @@ def print_message(msg):
 
 # Print a list of messages as one (Char limit = 2000)
 def stitch_messages(msgs):
+    single_message_array = []
     single_message = 'Search Results:\n'
-    for i in range(0, len(msgs)):
-        msg = msgs[i]
-        single_message = single_message + "---------------------------------------\n" + str(msg.author) + '            `' + str(msg.timestamp)[:16] + '`\n \t`' + str(msg.content) + '`\n'
-    return single_message
+  #  for i in range(0, len(msgs)):
+    for msg in reversed(msgs):
+        formated_message = "---------------------------------------\n" + str(msg.author) + '            `' + str(msg.timestamp)[:16] + '`\n \t`' + str(msg.content) + '`\n'
+        if len(single_message + formated_message) < 2000:
+            single_message = single_message + formated_message
+        else:
+            single_message_array.append(single_message)
+            single_message = formated_message
+
+    single_message_array.append(single_message)
+
+    return single_message_array
+
 
 # Check if someone is Admin or not.
 def is_admin(author):
