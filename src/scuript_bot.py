@@ -97,7 +97,7 @@ def on_message(message):
     if message.content.startswith('!rekt'):
         tts_msg = 'You got rekt, son!'
         client.send_message(message.channel, tts_msg, True, True)
-        img_num = str(random.randint(1,140))
+        img_num = str(random.randint(1,150))
         
 
         rekt_path = ('../images/rekt/rekt_img_num_placeholder.jpg')
