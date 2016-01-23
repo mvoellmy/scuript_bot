@@ -9,8 +9,11 @@ import configparser
 import copy
 import time
 import zxlolbot
+import os
 import os.path
 import random
+
+
 
 from collections import deque
 from decimal import Decimal
@@ -36,6 +39,11 @@ server_id = '114100951719215113'
 
 member_join = True
 
+# generate emotes list
+emotes_list = [f for f in os.listdir('./emotes') if os.path.isfile(os.path.join('./emotes', f))]
+emotes_list = [emote.replace('.png', '') for emote in emotes_list]
+
+
 #########################################################################################
 # TODO add all discord related code to the scuriptdiscord class
 # Commands for the bot
@@ -54,10 +62,20 @@ def on_message(message):
                 "!search"   : "Search the messages sent since the bot has been started.",
                 "!callouts" : "get a callouts-map for the map."}
 
+    for emote in emotes_list:
+        if emote in message.content:
+            emote_path = './emotes/' + emote + '.png'
+            emote_img = open(emote_path,"rb")
+            client.send_file(message.channel, emote_img)
+   
+
     if message.content == '!sclol':
         logger.debug('I am in !sclol')
         print('I will try to send this to summoner: @fox3ye')
         #todo send this message to summoner....
+
+    if message.content == '!emotes':
+        print(emotes_list)
 
     if message.content == '!help':
         logger.debug('I am in !help')
