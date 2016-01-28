@@ -124,7 +124,7 @@ set lolver=!v0!.!v1!.!v2!.!v3!
 
 @cd /d "!RADS_PATH!\solutions\lol_game_client_sln\releases\!lolver!\deploy"
 if exist "League of Legends.exe" (
-	@start "" "League of Legends.exe" "8394" "LoLLauncher.exe" "" "spectator spectator.euw1.lol.riotgames.com:80 IbQHkGUx0d1j21IR19zqoKPwT7mplq4O 2460671947 EUW1"
+	@start "" "League of Legends.exe" "8394" "LoLLauncher.exe" "" "spectator spectator.euw1.lol.riotgames.com:80 qBCtc2zXtvCD3WufMp5uGoUqUujuQOYE 2487261507 EUW1"
 	goto exit
 )
 :cannotFind

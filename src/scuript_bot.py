@@ -64,18 +64,19 @@ def on_message(message):
 
     for emote in emotes_list:
         if emote in message.content:
+            logger.debug('I am in !emotes')
             emote_path = './emotes/' + emote + '.png'
             emote_img = open(emote_path,"rb")
             client.send_file(message.channel, emote_img)
    
+    if message.content == '!emotes':
+        print(emotes_list)
 
     if message.content == '!sclol':
         logger.debug('I am in !sclol')
-        print('I will try to send this to summoner: @fox3ye')
+        print('I will try to send this to summoner: @fox3ye') 
         #todo send this message to summoner....
 
-    if message.content == '!emotes':
-        print(emotes_list)
 
     if message.content == '!help':
         logger.debug('I am in !help')
@@ -357,6 +358,7 @@ def on_ready():
     # Set Default Game of Scuript Bot
     scuript_bot_game = game('with your feelings...') 
     client.change_status(scuript_bot_game, False)
+    
     print('Scuript_Bot started successfully.')
 
 #########################################################################################
@@ -437,6 +439,7 @@ def is_admin(author):
 #########################################################################################
 
 if __name__ == "__main__":
+    logger.debug('I am in __main__')
     # zxlolbot
     scuriptlol = scuriptlol(username_lol, password_lol)
     scuriptlol.connect()
