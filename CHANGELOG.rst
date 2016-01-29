@@ -4,6 +4,7 @@ Changelog for SCURIPTBOT
 
 TODO
 ------------------
+* Update code to new discord.py
 * clean up the code/create code structure.
 * add version number, api keys, default_game etc. to an external init.txt file.
 * implement permission structure (Admin/Mod)
@@ -12,7 +13,6 @@ TODO
 
 KNOWN BUGS
 ------------------
-* crashes randomly with the error message in /log/crash.txt
 
 NICE TO HAVE FEATURES
 ------------------
