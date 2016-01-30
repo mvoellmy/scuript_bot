@@ -1,7 +1,9 @@
 # scuript_bot
 
 SCURIPT_BOT was developed to help new users set up their microphone and headphones propperly.
+
 Join the official SCURIPT_BOT server here:
+
 htttp://discord.me/scuript_bot  
 
 ## Usage
