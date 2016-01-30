@@ -1,22 +1,28 @@
 import datetime
 import requests
 import logging
+import configparser
+
+
 
 from io import BytesIO
 from PIL import Image
 from riotwatcher import RiotWatcher
 from riotwatcher import EUROPE_WEST
+from riotwatcher import NORTH_AMERICA
 from riotwatcher import LoLException, error_404, error_429
 
 logger = logging.getLogger("scuript_logger.league")
 
-w = RiotWatcher('b6e57fc8-b03e-40ce-8c84-55d616941248', default_region=EUROPE_WEST)
+w = RiotWatcher('b6e57fc8-b03e-40ce-8c84-55d616941248')
 #static_champ_list = w.static_get_champion_list()
 #logger.debug(static_champ_list)
 
 #CONSTANTS
 UNKNOWN = 'unknown'
 
+config = configparser.ConfigParser()
+config.read('../cfg/regions.txt')
 
 queue_types = {
     0  : 'CUSTOM',  # Custom games
@@ -41,7 +47,7 @@ queue_types = {
     93 : 'NIGHTMARE BOT 5x5 RANK5', # Doom Bots Rank 5 games
     96 : 'ASCENSION 5x5', # Ascension games
     98 : 'HEXAKILL Twisted Treeline', # Twisted Treeline 6x6 Hexakill games
-    100 : 'BILGEWATER ARAM 5x5', # Butcher's Bridge games
+    100: 'BILGEWATER ARAM 5x5', # Butcher's Bridge games
     300: 'KING PORO 5x5', # Poroking 5v5
     310: 'COUNTER PICK (NEMESIS)', # Nemesis games
     313: 'BILGEWATER 5x5', # Black Market Brawlers games
@@ -51,7 +57,24 @@ queue_types = {
 # check if we have API calls remaining
 logger.debug('Lets check if we can make requests to the Riot API: ' + str(w.can_make_request()))
 
-def get_match_details(summoner_name):
+# Get Region Parameters out of cfg-file
+def get_region_params(region_name):
+
+	region_params = {'Region'    : config.get(region_name, 'region'),
+					 'PlatformID': config.get(region_name, 'platformID'),
+					 'Domain'    : config.get(region_name, 'domain'),
+					 'Port'		 : config.get(region_name, 'port')}
+	return region_params
+
+def get_regions():
+	return config.sections()
+
+
+def get_match_details(summoner_name, region_name='EUW'):
+
+	region_params = get_region_params(region_name)
+	# w.__init__('b6e57fc8-b03e-40ce-8c84-55d616941248', default_region=region_name)
+
 	match_details = {}
 
 	logger.debug('*********************************************')
@@ -59,9 +82,9 @@ def get_match_details(summoner_name):
 
 	try:
 		#fetch summoner and current game info
-		summoner = w.get_summoner(name=summoner_name)
+		summoner = w.get_summoner(name=summoner_name, region=region_params['Region'].lower())
 		summoner_id = summoner['id']
-		current_game = w.get_current_game(summoner_id)
+		current_game = w.get_current_game(summoner_id, platform_id=region_params['PlatformID'], region=region_params['Region'].lower())
 		participants = current_game.get('participants', UNKNOWN)
 		logger.debug('Summoner ID: ' + str(summoner_id))
 		logger.debug('Game queue ID: ' + str(current_game.get('gameQueueConfigId', 'Error: No gameQueueID.')))
@@ -71,6 +94,7 @@ def get_match_details(summoner_name):
 		game_queue_id = current_game.get('gameQueueConfigId', 999)
 		queue_type = queue_types.get(game_queue_id)
 		match_details['queue_type'] = queue_type
+
 
 		#get game duration
 		game_length = current_game.get('gameLength', UNKNOWN)
@@ -95,7 +119,7 @@ def get_match_details(summoner_name):
 					logger.debug(champion)
 
 		#ranked stats for current champion
-		ranked_stats_champions = w.get_ranked_stats(summoner_id).get('champions')
+		ranked_stats_champions = w.get_ranked_stats(summoner_id, region=region_params['Region'].lower()).get('champions')
 		for rnkd_champ_stat in ranked_stats_champions:
 			if rnkd_champ_stat.get('id') == champion_id:
 				ranked_stats_current_champion = rnkd_champ_stat.get('stats')
@@ -115,7 +139,7 @@ def get_match_details(summoner_name):
 
 		logger.debug(match_details['queue_type'])
 
-		#get encryptionKey for spectation
+		#get encryptionKey for Spectate File
 		observers = current_game.get('observers', UNKNOWN)
 		match_details['encryption_key'] = observers.get('encryptionKey')
 		match_details['game_id'] = current_game.get('gameId', UNKNOWN)
@@ -147,4 +171,4 @@ def populate_champion_image_url(champion_key):
 	url_base = realm_data['cdn']
 	current_version = realm_data['v']
 
-	return url_base + '/' + current_version + '/img/champion/' + champion_key
+	return url_base + '/' + current_version + '/img/champion/' + champion_key	

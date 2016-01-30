@@ -9,5 +9,5 @@ src/.DS_Store
 *.log
 *.pyc
 
-src/op_gg_spectate_customized.bat
-src/op_gg_spectate_customized
+bat/op_gg_spectate_customized.bat
+bat/op_gg_spectate_customized

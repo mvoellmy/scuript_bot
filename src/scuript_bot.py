@@ -13,13 +13,15 @@ import os
 import os.path
 import random
 
-
-
 from collections import deque
 from decimal import Decimal
 
 # Scuript Modules
 from league_utils import get_match_details
+from league_utils import get_region_params
+from league_utils import get_regions
+from get_twitch_emotes import get_emotes
+from get_twitch_emotes import EMOTES_PATH
 
 ## SCURIPT BOT ##
 logging.config.fileConfig('../cfg/logging.conf')
@@ -37,10 +39,11 @@ password_lol = config.get('scuriptlol', 'password_lol')
 client = discord.Client()
 server_id = '114100951719215113'
 
-member_join = True
+_join = True
 
 # generate emotes list
-emotes_list = [f for f in os.listdir('./emotes') if os.path.isfile(os.path.join('./emotes', f))]
+emotes_list = []
+emotes_list = [f for f in os.listdir(EMOTES_PATH) if os.path.isfile(os.path.join(EMOTES_PATH, f))]
 emotes_list = [emote.replace('.png', '') for emote in emotes_list]
 
 
@@ -50,35 +53,45 @@ emotes_list = [emote.replace('.png', '') for emote in emotes_list]
 @client.event
 def on_message(message):
     placeholder = "\n \t"
-    commands =  {"!help"    : "Displays version of the SCURIPT_BOT", 
-                "!version"  : "Look up the current version of scuript_bot!.", 
-                "!hello"    : "Say 'Hello' to scuript_bot!", 
-                "!tutorial" : "Guide to setup your sound in Discord", 
-                "!join"     : "enter your (SERVER_URL)", 
-                "!git"      : "Link to the github repo.", 
-                "!tts"      : "Let the bot speak for you!",
-                "!rekt"     : "Get R3kt son!",
-                "!currgame" : "Check if Summoner XY is playing and for how long!",
-                "!search"   : "Search the messages sent since the bot has been started.",
-                "!callouts" : "get a callouts-map for the map."}
+    commands =  {"!tutorial"                 : "Guide to setup your sound in Discord",
+                "!currgame <SUMMONER_NAME>"  : "Check if your buddy is playing League of Legends and spectate him!\n \tOptions: -<REGION>",
+                "!search <SEARCH_TERM>"      : "Searches channel history.\n \tOptions: -any, -here",
+                "!callouts <MAP_NAME>"       : "Don't know where 'Tunnels' or 'A-long' is? Enter the CS:GO map name to learn.",                 
+                "!join <SERVER_URL>"         : "enter your (SERVER_URL)",
+                "!cleanup <OPTIONS>"         : "Delete the chatlog. \n \tOptions: -all, -bot, -cmds, -self",
+                "!help more"                 : "more stuff"}
 
-    for emote in emotes_list:
-        if emote in message.content:
-            logger.debug('I am in !emotes')
-            emote_path = './emotes/' + emote + '.png'
-            emote_img = open(emote_path,"rb")
-            client.send_file(message.channel, emote_img)
+    more_commands =  {
+                "!version"                   : "Look up the current version of scuript_bot!.",
+                "!rekt"                      : "get r3kt m8", 
+                "!hello"                     : "Say 'Hello' to scuript_bot!", 
+                "!git"                       : "Link to the github repo.", 
+                "!tts <YOUR_TEXT>"           : "Let the bot speak for you!",
+                "!set_game <GAME_NAME>"      : "Set the game of SCURIPT_BOT (Admin only).",
+                "!emotes"                    : "Get available emotes."}
+
+    if message.content == '!get_emotes' and is_admin(message.author):
+        client.send_typing(message.channel)
+        if get_emotes():
+            client.send_message(message.channel, 'All emotes have been downloaded. Restart Bot to use them.')
+        else:
+            client.send_message(message.channel, 'There has been an error with downloading the emotes.')
+
    
-    if message.content == '!emotes':
-        print(emotes_list)
+    elif message.content == '!emotes':
+        emote_msg = 'All available emotes:\n'
+        for emote in emotes_list:
+            emote_msg = emote_msg + str(emote) + '\n'
+        client.send_message(message.author, emote_msg)
+        client.send_message(message.channel, 'A list with the available emotes has been sent to {0}.'.format(message.author.mention()))
 
-    if message.content == '!sclol':
+    elif message.content == '!sclol':
         logger.debug('I am in !sclol')
         print('I will try to send this to summoner: @fox3ye') 
         #todo send this message to summoner....
 
 
-    if message.content == '!help':
+    elif message.content == '!help':
         logger.debug('I am in !help')
         help_msg = "Looks like somebody needs help, lets see what we can do for you! beep-boop:\n \n"
         for k,v in commands.items():
@@ -86,29 +99,34 @@ def on_message(message):
 
         client.send_message(message.channel, help_msg)
 
+    elif message.content == '!help more':
+        logger.debug('I am in !help more')
+        help_msg = "Here are some more commands:\n \n"
+        for k,v in more_commands.items():
+            help_msg+='`{0}`{1}{2}\n'.format(k, placeholder, v)
 
-    if message.content == '!hello':
+        client.send_message(message.channel, help_msg)
+
+    elif message.content == '!hello':
         logger.debug('I am in !hello')
         client.send_message(message.channel, 'Hello received. Thank you! beep-boop')
 
 
-    if message.content == '!version':
+    elif message.content == '!version':
         logger.debug('I am in !version')        
-        client.send_message(message.channel, 'SCURIPT BOT VERSION 0.0.3!')
+        client.send_message(message.channel, 'SCURIPT BOT VERSION 0.0.4!')
  
-
-    if message.content == '!tutorial':
+    elif message.content == '!tutorial':
         logger.debug('I am in !tutorial')
         tutorial(message.channel)
 
-    if message.content.startswith('!join'):
+    elif message.content.startswith('!join'):
         logger.debug('I am in !join')
         url = message.content.replace("!join ", "")
         client.accept_invite(url)
         client.send_message(message.channel, "SCURIPT_BOT successfully joined your channel!")
 
-    
-    if message.content.startswith('!set_game') and is_admin(message.author):
+    elif message.content.startswith('!set_game') and is_admin(message.author):
         logger.debug('I am in !set_game')
         scuript_bot_game = game('with your feelings...') 
         game_name = str(message.content.replace('!set_game ',''))
@@ -116,17 +134,17 @@ def on_message(message):
         client.change_status(scuript_bot_game)
         #client.send_message(message.channel, 'The bot game has been successfully changed to {0}.'.format(game.name))
 
-    if message.content == '!git':
+    elif message.content == '!git':
         logger.debug('I am in !git')
         client.send_message(message.channel, 'https://github.com/mvoellmy/scuript_bot')
 
-    if message.content.startswith('!tts'):
+    elif message.content.startswith('!tts'):
         logger.debug('I am in !tts')
         tts_msg = message.content.replace("!tts ", "")
         tts_msg = 'Beep, boop. ' + tts_msg + '. Beep, boop.'
         client.send_message(message.channel, tts_msg, True, True)
 
-    if message.content.startswith('!rekt'):
+    elif message.content.startswith('!rekt'):
         logger.debug('I am in !rekt')
 
         rekt_list = ['You got rekt, son!',
@@ -136,12 +154,13 @@ def on_message(message):
                      'You sir just experienced a wreckoning!',
                      'REKT! REKT! REKT!',
                      'Get noscoped bitch!',
-                     'Mom get the camera!',
+                     'Mom get the camera! This guy got rekt!',
                      'rekekekekekekekeket!',
                      'hue hue hue hue. Morde es numero uno.',
                      'Get rekt, son!',
                      'Rekt!',
-                     'Get rekt, biatch!']
+                     'Get rekt, biatch!',
+                     'R-E-K-T']
 
         tts_msg = random.choice(rekt_list)
 
@@ -157,10 +176,26 @@ def on_message(message):
         else:
             client.send_message(message.channel, "No image was found with the name 'rekt_{0}.jpg'".format(img_num))
 
-    if message.content.startswith('!currgame'):
+    elif message.content.startswith('!currgame'):
         logger.debug('I am in !currgame')
+        client.send_typing(message.channel)
+        
         summoner_name = message.content.replace('!currgame ', "")
-        match_details = get_match_details(summoner_name)
+
+        region_name = 'EUW'
+        regions = get_regions()
+
+        for region in regions:
+            temp_region = '-' + region
+            if temp_region.lower() in message.content.lower():
+                region_name = region
+                summoner_name = summoner_name.replace(temp_region.lower(), '')
+                summoner_name = summoner_name.replace(temp_region.upper(), '')
+                break
+
+        region_params = get_region_params(region_name)
+
+        match_details = get_match_details(summoner_name, region_name)
 
         show_champion_details = False
         if not match_details:
@@ -172,41 +207,45 @@ def on_message(message):
         elif match_details.get('queue_type') == 'unknown':
             show_champion_details = True
             client.send_message(message.channel, match_details.get('champion_image'))
-            game_details = "`Summoner '{0}' appears to be ingame as {1} {2} on (EUW) for {3} minutes. But unfortunately the game mode is: {4} :(.`".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('game_length'), match_details.get('queue_type'))
+            game_details = "`Summoner '{0}' appears to be ingame as {1} {2} on {5} for {3} minutes. But unfortunately the game mode is: {4} :(.`".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('game_length'), match_details.get('queue_type'), region_params['Region'])
         
         else:
             show_champion_details = True
             client.send_message(message.channel, match_details.get('champion_image'))
-            game_details = "`Summoner '{0}' is currently playing {1} {2}: {3} (EUW) for {4} minutes.`".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('queue_type'), match_details.get('game_length'))
+            game_details = "`Summoner '{0}' is currently playing {1} {2}: {3} on {5} for {4} minutes.`".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('queue_type'), match_details.get('game_length'), region_params['Region'])
             
 
         client.send_message(message.channel, game_details)
 
-        if show_champion_details:
+        if show_champion_details:            
+
             client.send_message(message.channel, "`\n \t Ranked stats with: {0}\n \t won: {1}\n \t lost: {2}\n \t ratio: {3}`".format(match_details.get('champion_name'), match_details.get('games_won'), match_details.get('games_lost'), match_details.get('win_ratio')))
+
             # Specatate Mode encryption key
-            spectate_file_stream = open('op_gg_spectate_template.bat','r')
+            spectate_file_stream = open('../bat/op_gg_spectate_template.bat','r')
             spectate_file_content = spectate_file_stream.read()
             spectate_file_stream.close()
             # Add correct encryption_key and game_id to bat file
             spectate_file_content = spectate_file_content.replace("encryptionKeyPlaceholder", match_details.get('encryption_key'))           
             spectate_file_content = spectate_file_content.replace("gameIdPlaceholder", str(match_details.get('game_id')))           
+            spectate_file_content = spectate_file_content.replace("platformIdPlaceholder", str(region_params['PlatformID']))           
+            spectate_file_content = spectate_file_content.replace("domainPlaceholder", str(region_params['Domain']))           
+            spectate_file_content = spectate_file_content.replace("portPlaceholder", str(region_params['Port']))           
 
-            spectate_file_stream = open('op_gg_spectate_customized.bat','w')
+            spectate_file_stream = open('../bat/op_gg_spectate_customized.bat','w')
             spectate_file_stream.write(spectate_file_content)
             spectate_file_stream.close()
             
-            op_gg_bat = open('op_gg_spectate_customized.bat',"rb")
+            op_gg_bat = open('../bat/op_gg_spectate_customized.bat',"rb")
             client.send_message(message.channel, 'Spectate the game by downloading and opening the following file:')          
             client.send_file(message.channel, op_gg_bat)
             # client.send_message(message.channel, 'Yes, Windows thinks its unsafe. \nNo, it is no virus. ;)')          
 
 
 
-    if message.content.startswith('!search') and str(message.author).lower() != 'SCURIPT_BOT'.lower():
+    elif message.content.startswith('!search') and str(message.author).lower() != 'SCURIPT_BOT'.lower():
         logger.debug('I am in !search')
-        #string.split(s[, sep[, maxsplit]])
-        
+
         number_of_requests = 10;
         result_count = 0
         search_count = 0
@@ -259,9 +298,13 @@ def on_message(message):
         for single_message in single_message_array:
             client.send_message(destination, single_message)
 
+        if destination == message.author:
+            client.send_message(message.channel, '{0} I sent you a message with the results of your search.'.format(message.author.mention()))
 
 
-    if message.content.startswith('!mbr_join') and is_admin(message.author):
+
+
+    elif message.content.startswith('!mbr_join') and is_admin(message.author):
         logger.debug('I am in !mbr_join')
         search_msg = message.content.replace('!mbr_join ', "")
         if search_msg == 0:
@@ -273,7 +316,7 @@ def on_message(message):
         else:
             client.send_message(message.channel,"Unvalid mbr_join argument.")
 
-    if message.content.startswith('!callouts'):
+    elif message.content.startswith('!callouts'):
         logger.debug('I am in !callouts')
         message.content = message.content.replace('!callouts ', "")
         message.content = message.content.replace('de_',"")
@@ -290,11 +333,11 @@ def on_message(message):
         else:
             client.send_message(message.channel, "No callouts-map was found for '{0}.'".format(message.content))
 
-    if message.content.startswith('!cleanup') and is_admin(message.author):
+    elif message.content.startswith('!cleanup') and is_admin(message.author):
         logger.debug('I am in !cleanup')
 
         _bot = False
-        _commands = False
+        _cmds = False
         _self = False
         _all = False 
 
@@ -303,8 +346,8 @@ def on_message(message):
         if '-bot' in message.content:
             _bot = True
         
-        if '-commands' in message.content:
-            _commands = True
+        if '-cmds' in message.content:
+            _cmds = True
         
         if '-self' in message.content:
             _self = True
@@ -325,7 +368,7 @@ def on_message(message):
                 if _bot and str(it_msg.author).lower() == 'SCURIPT_BOT'.lower():
                     client.delete_message(it_msg)
                     result_count = result_count + 1
-                elif _commands and it_msg.content.startswith('!'):
+                elif _cmds and it_msg.content.startswith('!'):
                     client.delete_message(it_msg)
                     result_count = result_count + 1    
                 elif _self and str(it_msg.author).lower() == str(message.author.lower()):
@@ -338,6 +381,14 @@ def on_message(message):
 
         client.send_message(message.channel,"{0} matching results have been deleted! ({0}/{1})".format(result_count, search_count))
 
+    for emote in emotes_list:
+        if emote in message.content and str(message.author).lower() != 'SCURIPT_BOT'.lower():
+            logger.debug('I am in !emotes')
+            emote_path = './emotes/' + emote + '.png'
+            emote_img = open(emote_path,"rb")
+            client.send_file(message.channel, emote_img)
+
+
 # Event for joining members
 @client.event
 def on_member_join(member):
@@ -345,6 +396,7 @@ def on_member_join(member):
         server = member.server
         client.send_message(server, 'Welcome {0} to the glorious {1.name} server!'.format(member.mention(), server))
         tutorial(member)
+        client.send_message(server, '{0} I sent you a message with instructions on how to setup your sound!'.format(member.mention()))
 
 # Commandline output on startup
 @client.event
@@ -362,6 +414,7 @@ def on_ready():
     print('Scuript_Bot started successfully.')
 
 #########################################################################################
+# Classes
 
 class scuriptlol(zxlolbot.zxLoLBoT):
     def __init__(self, username, password, region="EUW"):

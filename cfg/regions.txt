@@ -1,0 +1,65 @@
+[NA]
+region 	   = NA
+platformID = NA1
+domain     = spectator.na.lol.riotgames.com
+port       = 80
+
+[EUW]
+region 	   = EUW
+platformID = EUW1
+domain     = spectator.euw1.lol.riotgames.com
+port       = 80
+
+[EUNE]
+region 	   = EUNE
+platformID = EUN1
+domain     = spectator.eu.lol.riotgames.com
+port       = 8088
+
+[KR]
+region 	   = KR
+platformID = KR
+domain     = spectator.kr.lol.riotgames.com
+port       = 80
+
+[OCE]
+region 	   = OCE
+platformID = OC1
+domain     = spectator.oc1.lol.riotgames.com
+port       = 80
+
+[BR]
+region 	   = BR
+platformID = BR1
+domain     = spectator.br.lol.riotgames.com
+port       = 80
+
+[LAN]
+region 	   = LAN
+platformID = LA1
+domain     = spectator.la1.lol.riotgames.com
+port       = 80
+
+[LAS]
+region 	   = LAS
+platformID = LA1
+domain     = spectator.la2.lol.riotgames.com
+port       = 80
+
+[RU]
+region 	   = RU
+platformID = RU
+domain     = spectator.ru.lol.riotgames.com
+port       = 80
+
+[TR]
+region 	   = TR
+platformID = TR1
+domain     = spectator.tr.lol.riotgames.com
+port       = 80
+
+[PBE]
+region 	   = PBE
+platformID = PBE1
+domain     = spectator.pbe1.lol.riotgames.com
+port       = 8088

@@ -23,8 +23,6 @@ NICE TO HAVE FEATURES
 * !currgame for Steam/CSGO
 * add sound board
 * !stat to display all the statuses of t he bots
-* add twitch emotes
-* make !currgame work for all regions
 * add current stats (items/kda/cs) to !currgame
 
 0.0.1 (2016-02-01)
@@ -58,3 +56,14 @@ NICE TO HAVE FEATURES
 * !rekt now send images of dank memes
 * !search now send messages in chunks smaller than the 2000 char limit but stitches the result together
 * -here and -any options were added to !search
+
+0.0.4 (2016-30-01)
+------------------
+* made !currgame work for all regions
+* updated !help
+* added twitch emotes
+* !emotes lists available emotes
+* !get_emotes downloads emotes
+* added mentions
+* changed all if to elif in on_message event
+* updated !help and added !help more
