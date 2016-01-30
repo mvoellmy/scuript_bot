@@ -384,7 +384,7 @@ def on_message(message):
     for emote in emotes_list:
         if emote in message.content and str(message.author).lower() != 'SCURIPT_BOT'.lower():
             logger.debug('I am in !emotes')
-            emote_path = './emotes/' + emote + '.png'
+            emote_path = EMOTES_PATH + emote + '.png'
             emote_img = open(emote_path,"rb")
             client.send_file(message.channel, emote_img)
 
