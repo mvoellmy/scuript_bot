@@ -51,6 +51,8 @@ queue_types = {
     300: 'KING PORO 5x5', # Poroking 5v5
     310: 'COUNTER PICK (NEMESIS)', # Nemesis games
     313: 'BILGEWATER 5x5', # Black Market Brawlers games
+    400: 'TEAM_BUILDER_DRAFT_UNRANKED_5x5', #Dynamic queue?
+    410: 'TEAM_BUILDER_DRAFT_RANKED_5x5', #Dynamic queue?
     999: UNKNOWN #Map is not known or RIOT API didnt provide queue Type ID.	
 }
 
