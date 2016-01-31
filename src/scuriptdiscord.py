@@ -42,7 +42,7 @@ class scuriptdiscord():
         self.client = client
 
     @client.event
-    def on_message(message):
+    async def on_message(message):
         placeholder = "\n \t"
         commands =  {"!tutorial"                 : "Guide to setup your sound in Discord",
                     "!currgame <SUMMONER_NAME>"  : "Check if your buddy is playing League of Legends and spectate him!\n \tOptions: -<REGION>",
@@ -62,24 +62,22 @@ class scuriptdiscord():
                     "!emotes"                    : "Get available emotes."}
     
         if message.author.avatar == None:
-            client.send_message(message.author, 'Dude, set a profile picture allready.')
-    
-    
+            await client.send_message(message.author, 'Dude, set a profile picture allready.')    
     
         if message.content == '!get_emotes' and is_admin(message.author):
-            client.send_typing(message.channel)
+            await client.send_typing(message.channel)
             if get_emotes():
-                client.send_message(message.channel, 'All emotes have been downloaded. Restart Bot to use them.')
+                await client.send_message(message.channel, 'All emotes have been downloaded. Restart Bot to use them.')
             else:
-                client.send_message(message.channel, 'There has been an error with downloading the emotes.')
+                await client.send_message(message.channel, 'There has been an error with downloading the emotes.')
     
        
         elif message.content == '!emotes':
             emote_msg = 'All available emotes:\n'
             for emote in emotes_list:
                 emote_msg = emote_msg + str(emote) + '\n'
-            client.send_message(message.author, emote_msg)
-            client.send_message(message.channel, 'A list with the available emotes has been sent to {0}.'.format(message.author.mention()))
+            await client.send_message(message.author, emote_msg)
+            await client.send_message(message.channel, 'A list with the available emotes has been sent to {0}.'.format(message.author.mention))
     
         elif message.content == '!sclol':
             logger.debug('I am in !sclol')
@@ -93,7 +91,7 @@ class scuriptdiscord():
             for k,v in commands.items():
                 help_msg+='`{0}`{1}{2}\n'.format(k, placeholder, v)
     
-            client.send_message(message.channel, help_msg)
+            await client.send_message(message.channel, help_msg)
     
         elif message.content == '!help more':
             logger.debug('I am in !help more')
@@ -101,44 +99,46 @@ class scuriptdiscord():
             for k,v in more_commands.items():
                 help_msg+='`{0}`{1}{2}\n'.format(k, placeholder, v)
     
-            client.send_message(message.channel, help_msg)
+            await client.send_message(message.channel, help_msg)
     
         elif message.content == '!hello':
             logger.debug('I am in !hello')
-            client.send_message(message.channel, 'Hello received. Thank you! beep-boop')
+            await client.send_message(message.channel, 'Hello received. Thank you! beep-boop')
     
     
         elif message.content == '!version':
             logger.debug('I am in !version')        
-            client.send_message(message.channel, 'SCURIPT BOT VERSION 0.0.4!')
+            await client.send_message(message.channel, 'SCURIPT BOT VERSION 0.0.4!')
      
         elif message.content == '!tutorial':
             logger.debug('I am in !tutorial')
-            tutorial(message.channel)
+            await tutorial(message.channel)
     
         elif message.content.startswith('!join'):
             logger.debug('I am in !join')
             url = message.content.replace("!join ", "")
-            client.accept_invite(url)
-            client.send_message(message.channel, "SCURIPT_BOT successfully joined your channel!")
+            await client.accept_invite(url)
+            await client.send_message(message.channel, "SCURIPT_BOT successfully joined your channel!")
     
         elif message.content.startswith('!set_game') and is_admin(message.author):
             logger.debug('I am in !set_game')
-            scuript_bot_game = game('with your feelings...') 
+
+            scuript_bot_game = discord.Game()
+            scuript_bot_game.name = 'with your feelings.'
             game_name = str(message.content.replace('!set_game ',''))
-            scuript_bot_game.set_name(game_name)
-            client.change_status(scuript_bot_game)
-            #client.send_message(message.channel, 'The bot game has been successfully changed to {0}.'.format(game.name))
+            scuript_bot_game.name = game_name
+            await client.change_status(scuript_bot_game)
+            await client.send_message(message.channel, 'The bot game has been successfully changed to {0}.'.format(scuript_bot_game.name))
     
         elif message.content == '!git':
             logger.debug('I am in !git')
-            client.send_message(message.channel, 'https://github.com/mvoellmy/scuript_bot')
+            await client.send_message(message.channel, 'https://github.com/mvoellmy/scuript_bot')
     
         elif message.content.startswith('!tts'):
             logger.debug('I am in !tts')
             tts_msg = message.content.replace("!tts ", "")
             tts_msg = 'Beep, boop. ' + tts_msg + '. Beep, boop.'
-            client.send_message(message.channel, tts_msg, True, True)
+            await client.send_message(message.channel, tts_msg, tts=True)
     
         elif message.content.startswith('!rekt'):
             logger.debug('I am in !rekt')
@@ -160,7 +160,7 @@ class scuriptdiscord():
     
             tts_msg = random.choice(rekt_list)
     
-            client.send_message(message.channel, tts_msg, True, True)
+            await client.send_message(message.channel, tts_msg, tts=True)
     
             img_num = str(random.randint(1,150))
             rekt_path = ('../images/rekt/rekt_img_num_placeholder.jpg')
@@ -168,13 +168,13 @@ class scuriptdiscord():
     
             if os.path.isfile(rekt_path):
                 rekt_img = open(rekt_path,"rb")
-                client.send_file(message.channel, rekt_img)
+                await client.send_file(message.channel, rekt_img)
             else:
-                client.send_message(message.channel, "No image was found with the name 'rekt_{0}.jpg'".format(img_num))
+                await client.send_message(message.channel, "No image was found with the name 'rekt_{0}.jpg'".format(img_num))
     
         elif message.content.startswith('!currgame'):
             logger.debug('I am in !currgame')
-            client.send_typing(message.channel)
+            await client.send_typing(message.channel)
             
             summoner_name = message.content.replace('!currgame ', "")
     
@@ -202,20 +202,20 @@ class scuriptdiscord():
     
             elif match_details.get('queue_type') == 'unknown':
                 show_champion_details = True
-                client.send_message(message.channel, match_details.get('champion_image'))
+                await client.send_message(message.channel, match_details.get('champion_image'))
                 game_details = "`Summoner '{0}' appears to be ingame as {1} {2} on {5} for {3} minutes. But unfortunately the game mode is: {4} :(.`".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('game_length'), match_details.get('queue_type'), region_params['Region'])
             
             else:
                 show_champion_details = True
-                client.send_message(message.channel, match_details.get('champion_image'))
+                await client.send_message(message.channel, match_details.get('champion_image'))
                 game_details = "`Summoner '{0}' is currently playing {1} {2}: {3} on {5} for {4} minutes.`".format(summoner_name, match_details.get('champion_name'), match_details.get('champion_title'), match_details.get('queue_type'), match_details.get('game_length'), region_params['Region'])
                 
     
-            client.send_message(message.channel, game_details)
+            await client.send_message(message.channel, game_details)
     
             if show_champion_details:            
     
-                client.send_message(message.channel, "`\n \t Ranked stats with: {0}\n \t won: {1}\n \t lost: {2}\n \t ratio: {3}`".format(match_details.get('champion_name'), match_details.get('games_won'), match_details.get('games_lost'), match_details.get('win_ratio')))
+                await client.send_message(message.channel, "`\n \t Ranked stats with: {0}\n \t won: {1}\n \t lost: {2}\n \t ratio: {3}`".format(match_details.get('champion_name'), match_details.get('games_won'), match_details.get('games_lost'), match_details.get('win_ratio')))
     
                 # Specatate Mode encryption key
                 spectate_file_stream = open('../bat/op_gg_spectate_template.bat','r')
@@ -233,9 +233,9 @@ class scuriptdiscord():
                 spectate_file_stream.close()
                 
                 op_gg_bat = open('../bat/op_gg_spectate_customized.bat',"rb")
-                client.send_message(message.channel, 'Spectate the game by downloading and opening the following file:')          
-                client.send_file(message.channel, op_gg_bat)
-                # client.send_message(message.channel, 'Yes, Windows thinks its unsafe. \nNo, it is no virus. ;)')          
+                await client.send_message(message.channel, 'Spectate the game by downloading and opening the following file:')          
+                await client.send_file(message.channel, op_gg_bat)
+                # await client.send_message(message.channel, 'Yes, Windows thinks its unsafe. \nNo, it is no virus. ;)')          
     
     
     
@@ -265,10 +265,11 @@ class scuriptdiscord():
                 _any = True
                 search_list.remove('-any')
     
-            client.send_typing(message.channel)
+            await client.send_typing(message.channel)
             for request in range(0, number_of_requests):
-                search_messages = client.logs_from(message.channel, 100, before_msg)
-                for it_msg in search_messages:
+                # search_messages = yield from client.logs_from(message.channel, limit=100, before=before_msg)
+                # for it_msg in search_messages:
+                async for it_msg in client.logs_from(message.channel, limit=100, before=before_msg):    
                     search_count = search_count + 1
                     if all(x.lower() in str(it_msg.content).lower() for x in search_list) and str(it_msg.author).lower() != 'SCURIPT_BOT'.lower() and it_msg.content.startswith('!') is not True:
                         results.append(it_msg)
@@ -292,10 +293,10 @@ class scuriptdiscord():
                 single_message_array.append('---------------------------------------\nNo matching result have been found in the {0} channel of the {3}! ({1}/{2}\nTry !help <search_text> -any to search if any words of your search can be found.)'.format(message.channel.name, result_count, search_count, message.channel.server.name))
     
             for single_message in single_message_array:
-                client.send_message(destination, single_message)
+                await client.send_message(destination, single_message)
     
             if destination == message.author:
-                client.send_message(message.channel, '{0} I sent you a message with the results of your search.'.format(message.author.mention()))
+                await client.send_message(message.channel, '{0} I sent you a message with the results of your search.'.format(message.author.mention))
     
     
     
@@ -305,12 +306,12 @@ class scuriptdiscord():
             search_msg = message.content.replace('!mbr_join ', "")
             if search_msg == 0:
                 _join = False
-                client.send_message(message.channel,"Turned welcome messages off.")
+                await client.send_message(message.channel,"Turned welcome messages off.")
             elif search_msg == 1:
                 _join = True
-                client.send_message(message.channel,"Turned welcome messages on.")
+                await client.send_message(message.channel,"Turned welcome messages on.")
             else:
-                client.send_message(message.channel,"Unvalid mbr_join argument.")
+                await client.send_message(message.channel,"Unvalid mbr_join argument.")
     
         elif message.content.startswith('!callouts'):
             logger.debug('I am in !callouts')
@@ -324,10 +325,10 @@ class scuriptdiscord():
             
             if os.path.isfile(callouts_path):
                 callouts_map = open(callouts_path,"rb")
-                client.send_message(message.channel, "`Callouts for {0}:`".format(message.content))
-                client.send_file(message.channel, callouts_map)
+                await client.send_message(message.channel, "`Callouts for {0}:`".format(message.content))
+                await client.send_file(message.channel, callouts_map)
             else:
-                client.send_message(message.channel, "No callouts-map was found for '{0}.'".format(message.content))
+                await client.send_message(message.channel, "No callouts-map was found for '{0}.'".format(message.content))
     
         elif message.content.startswith('!cleanup') and is_admin(message.author):
             logger.debug('I am in !cleanup')
@@ -355,48 +356,48 @@ class scuriptdiscord():
             search_count = 0
             before_msg = message
     
-            client.send_typing(message.channel)
+            await client.send_typing(message.channel)
     
             for request in range(0, number_of_requests):
-                search_messages = client.logs_from(message.channel, 100, before_msg)
-                for it_msg in search_messages:
+                # search_messages = yield from client.logs_from(message.channel, limit=100, before=before_msg)
+                async for it_msg in client.logs_from(message.channel, limit=100, before=before_msg):
                     search_count = search_count + 1
                     if _bot and str(it_msg.author).lower() == 'SCURIPT_BOT'.lower():
-                        client.delete_message(it_msg)
+                        await client.delete_message(it_msg)
                         result_count = result_count + 1
                     elif _cmds and it_msg.content.startswith('!'):
-                        client.delete_message(it_msg)
+                        await client.delete_message(it_msg)
                         result_count = result_count + 1    
                     elif _self and str(it_msg.author).lower() == str(message.author.lower()):
-                        client.delete_message(it_msg)
+                        await client.delete_message(it_msg)
                         result_count = result_count + 1
                     elif _all:
-                        client.delete_message(it_msg)
+                        await client.delete_message(it_msg)
                         result_count = result_count + 1
                 before_msg = it_msg
     
-            client.send_message(message.channel,"{0} matching results have been deleted! ({0}/{1})".format(result_count, search_count))
+            await client.send_message(message.channel,"{0} matching results have been deleted! ({0}/{1})".format(result_count, search_count))
     
         for emote in emotes_list:
             if emote in message.content and str(message.author).lower() != 'SCURIPT_BOT'.lower():
                 logger.debug('I am in !emotes')
                 emote_path = EMOTES_PATH + emote + '.png'
                 emote_img = open(emote_path,"rb")
-                client.send_file(message.channel, emote_img)
+                await client.send_file(message.channel, emote_img)
     
     
     # Event for joining members
     @client.event
-    def on_member_join(member):
+    async def on_member_join(member):
         if _join:
             server = member.server
-            client.send_message(server, 'Welcome {0} to the glorious {1.name} server!'.format(member.mention(), server))
+            await client.send_message(server, 'Welcome {0} to the glorious {1.name} server!'.format(member.mention, server))
             tutorial(member)
-            client.send_message(server, '{0} I sent you a message with instructions on how to setup your sound!'.format(member.mention()))
+            await client.send_message(server, '{0} I sent you a message with instructions on how to setup your sound!'.format(member.mention))
     
     # Commandline output on startup
     @client.event
-    def on_ready():
+    async def on_ready():
         logger.debug('Logged in as')
         logger.debug(client.user.name)
         logger.debug('ID:')
@@ -404,38 +405,39 @@ class scuriptdiscord():
         logger.debug('------')
     
         # Set Default Game of Scuript Bot
-        scuript_bot_game = game('with your feelings...') 
-        client.change_status(scuript_bot_game, False)
+        scuript_bot_game = discord.Game()
+        scuript_bot_game.name = 'with your feelings.'
+        await client.change_status(scuript_bot_game, False)
         
         print('Scuript_Bot started successfully.')
 
 #########################################################################################
 # Helper Classes
 
-class game(object):
-    def __init__(self, game_name):
-        self.set_name(game_name)
-    def set_name(self,game_name):
-        self.name = game_name
+# class game(object):
+#     def __init__(self, game_name):
+#         self.set_name(game_name)
+#     def set_name(self,game_name):
+#         self.name = game_name
 
 #########################################################################################
 
 # Helper Functions --> should be moved to a utils.py in the utils folder
 # Messages
-def tutorial(tutorial_channel):
+async def tutorial(tutorial_channel):
     img_1 = open('../images/tutorial/img_tutorial_000.jpg',"rb")
     img_2 = open('../images/tutorial/img_tutorial_001.jpg',"rb")
-    client.send_message(tutorial_channel, "`Guide to setup your sound in Discord. \n1. Check if your microphone is muted \n2. Check if your headphones are deafend \n3. Enter the sound settings`")
-    client.send_file(tutorial_channel, img_1)
-    client.send_message(tutorial_channel, "`4. Set your sound input and output channels \n5. Activate automatic input sensitivity.`")
-    client.send_file(tutorial_channel, img_2)
-    client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
+    await client.send_message(tutorial_channel, "`Guide to setup your sound in Discord. \n1. Check if your microphone is muted \n2. Check if your headphones are deafend \n3. Enter the sound settings`")
+    await client.send_file(tutorial_channel, img_1)
+    await client.send_message(tutorial_channel, "`4. Set your sound input and output channels \n5. Activate automatic input sensitivity.`")
+    await client.send_file(tutorial_channel, img_2)
+    await client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
 
 # Print a message
-def print_message(msg):
+async def print_message(msg):
     #if msg.content.startswith('!search'):
     #    msg.content = msg.content.replace('!search ', "¡search ")
-    client.send_message(msg.channel, "---------------------------------------\n {0} `{1}`\n \t``{2}``".format(msg.author, str(msg.timestamp)[:16], msg.content))
+    await client.send_message(msg.channel, "---------------------------------------\n {0} `{1}`\n \t``{2}``".format(msg.author, str(msg.timestamp)[:16], msg.content))
     logger.debug(msg.author)
     logger.debug(msg.content)
 

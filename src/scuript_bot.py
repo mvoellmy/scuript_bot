@@ -39,5 +39,4 @@ if __name__ == "__main__":
 
     # discord client
     scuriptdiscord = scuriptdiscord.scuriptdiscord(username_discord, password_discord)
-    scuriptdiscord.client.login(username_discord, password_discord)
-    scuriptdiscord.client.run()
+    scuriptdiscord.client.run(username_discord, password_discord)
