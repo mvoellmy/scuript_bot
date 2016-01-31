@@ -22,9 +22,12 @@ from league_utils import get_region_params
 from league_utils import get_regions
 from get_twitch_emotes import get_emotes
 from get_twitch_emotes import EMOTES_PATH
+SOUNDS_PATH = '../sounds/montage_parodies/'
+
 
 logger = logging.getLogger("scuript_discord.bot")
 client = discord.Client()
+discord.opus.load_opus('libopus-0.dll')
 
 _join = True
 
@@ -32,6 +35,10 @@ _join = True
 emotes_list = []
 emotes_list = [f for f in os.listdir(EMOTES_PATH) if os.path.isfile(os.path.join(EMOTES_PATH, f))]
 emotes_list = [emote.replace('.png', '') for emote in emotes_list]
+
+sounds_list = []
+sounds_list = [f for f in os.listdir(SOUNDS_PATH) if os.path.isfile(os.path.join(SOUNDS_PATH, f))]
+sounds_list = [sound.replace('.mp3', '') for sound in sounds_list]
 
 
 #########################################################################################
@@ -235,9 +242,7 @@ class scuriptdiscord():
                 op_gg_bat = open('../bat/op_gg_spectate_customized.bat',"rb")
                 await client.send_message(message.channel, 'Spectate the game by downloading and opening the following file:')          
                 await client.send_file(message.channel, op_gg_bat)
-                # await client.send_message(message.channel, 'Yes, Windows thinks its unsafe. \nNo, it is no virus. ;)')          
-    
-    
+                # await client.send_message(message.channel, 'Yes, Windows thinks its unsafe. \nNo, it is no virus. ;)')             
     
         elif message.content.startswith('!search') and str(message.author).lower() != 'SCURIPT_BOT'.lower():
             logger.debug('I am in !search')
@@ -297,10 +302,30 @@ class scuriptdiscord():
     
             if destination == message.author:
                 await client.send_message(message.channel, '{0} I sent you a message with the results of your search.'.format(message.author.mention))
-    
-    
-    
-    
+
+        elif message.content == '!dc':
+            await leaveVoice() 
+   
+        elif message.content == '!sounds':
+            sound_msg = 'All available sounds:\n'
+            for sound in sounds_list:
+                sound_msg = sound_msg + str(sound) + '\n'
+            await client.send_message(message.author, sound_msg)
+            await client.send_message(message.channel, 'A list with the available sounds has been sent to {0}.'.format(message.author.mention))
+
+        elif message.content.startswith('!sounds'):
+            logger.debug('I am in !sounds')
+            sound = message.content.replace('!sounds ', "")
+            sound = sound + '.mp3'
+            sound_path = SOUNDS_PATH + sound
+
+            if os.path.isfile(sound_path):
+                if await connect_voice(message):
+                    player = client.voice.create_ffmpeg_player(sound_path)
+                    player.start()
+            else:
+                await client.send_message(message.channel, "No sound file was found for '{0}.'".format(message.content))
+
         elif message.content.startswith('!mbr_join') and is_admin(message.author):
             logger.debug('I am in !mbr_join')
             search_msg = message.content.replace('!mbr_join ', "")
@@ -432,6 +457,36 @@ async def tutorial(tutorial_channel):
     await client.send_message(tutorial_channel, "`4. Set your sound input and output channels \n5. Activate automatic input sensitivity.`")
     await client.send_file(tutorial_channel, img_2)
     await client.send_message(tutorial_channel, "`6. Enjoy communicating with other human beeing. \nand remember no cheating. \nBeep Boop SCURIPT_BOT out!`")
+
+async def connect_voice(message):
+    if not client.is_voice_connected():
+        if message.author.voice_channel:
+            if message.author.voice_channel.permissions_for(message.server.me).connect:
+                await client.join_voice_channel(message.author.voice_channel)
+            else:
+                await client.send_message(message.channel, "{} `I need permissions to join that channel.`".format(message.author.mention))
+                return False
+        else:
+            await client.send_message(message.channel, "{} `You need to join a voice channel first.`".format(message.author.mention))
+            return False
+
+        return True
+    else:
+        if message.author.voice_channel:
+            if client.voice.channel == message.author.voice_channel:
+                return True
+            else:
+                await leaveVoice()
+                await client.join_voice_channel(message.author.voice_channel)
+                return True
+        else:
+            await client.send_message(message.channel, "{} `You need to join a voice channel first.`".format(message.author.mention))
+            return False
+
+
+async def leaveVoice():
+    if client.is_voice_connected():
+        await client.voice.disconnect()
 
 # Print a message
 async def print_message(msg):
