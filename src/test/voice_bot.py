@@ -18,7 +18,7 @@ async def on_message(message):
 		print(voice_channel)
 		voice = await client.join_voice_channel(voice_channel)
 		print(client.is_voice_connected())
-		player = voice.create_ffmpeg_player('../sounds/montage_parodies/MOM GET THE CAMERA.mp3')
+		player = voice.create_ffmpeg_player('../../sounds/montage_parodies/MOM GET THE CAMERA.mp3')
 		player.start()
 		
 client.run(username_discord, password_discord)
