@@ -67,3 +67,10 @@ NICE TO HAVE FEATURES
 * added mentions
 * changed all if to elif in on_message event
 * updated !help and added !help more
+
+0.0.5 (2016-25-02)
+------------------
+* !sounds sends list of sounds via PM
+* "!sounds random" plays a random sound
+* !dindindin = balls
+* updated readme

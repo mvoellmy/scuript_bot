@@ -47,15 +47,17 @@ Clone this repository and install the needed dependencies.
 
 ### Dependencies
 
-Install python 3.5 from here:
+Install `python 3.5` from here:
 
 https://www.python.org/
 
-Install the discord python wrapper using pip:
+Install the beta of `discord.py` using `pip` and `git`:
 
-    pip install discord.py
+    pip install git+https://github.com/Rapptz/discord.py@async
 
 https://github.com/Rapptz/discord.py
+
+Note that this requires `git` to be installed.
 
 Install the Riot API wrapper using pip:
 
@@ -73,7 +75,15 @@ Install following packages to run the zxLolBot
     pip install dnspython3
 
 https://github.com/Mathzx/zxLoLBoT
+
+Install `FFmpeg` as instructed here:
     
+    http://adaptivesamples.com/how-to-install-ffmpeg-on-windows/
+
+Note that the `Opus Codec` is used for the sounds and the used version is only tested in windows.
+    
+    https://www.opus-codec.org/
+
 ### Setting up your cfg.txt
 
 Add src/cfg.txt with your bots credidentials.
@@ -88,6 +98,10 @@ Add src/cfg.txt with your bots credidentials.
 
 ### Let the magic happen
 
-Run 
+Run in commmand line 
 
     python scuript_bot.py
+
+or double click
+
+    run_scuript_bot.bat
