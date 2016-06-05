@@ -420,7 +420,15 @@ class scuriptdiscord():
 				before_msg = it_msg
 	
 			await client.send_message(message.channel,"{0} matching results have been deleted! ({0}/{1})".format(result_count, search_count))
-	
+		
+		elif message.content.startswith('!map_vote'):
+			if 'start' in message.content and map_vote_on == False:
+				map_vote_on = true
+				message.content = message.content.replace('!map_vote start ','')
+			
+			elif 'stop' in message.content and map_vote_on == True:
+				print('stop')
+
 		for emote in emotes_list:
 			if emote in message.content and str(message.author).lower() != 'SCURIPT_BOT'.lower():
 				logger.debug('I am in !emotes')
