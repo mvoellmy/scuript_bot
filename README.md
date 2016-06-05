@@ -78,11 +78,11 @@ https://github.com/Mathzx/zxLoLBoT
 
 Install `FFmpeg` as instructed here:
     
-    http://adaptivesamples.com/how-to-install-ffmpeg-on-windows/
+http://adaptivesamples.com/how-to-install-ffmpeg-on-windows/
 
 Note that the `Opus Codec` is used for the sounds and the used version is only tested in windows.
     
-    https://www.opus-codec.org/
+https://www.opus-codec.org/
 
 ### Setting up your cfg.txt
 
