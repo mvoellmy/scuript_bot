@@ -338,8 +338,14 @@ class scuriptdiscord():
 			sound_path = SOUNDS_PATH + sound
 
 			if os.path.isfile(sound_path):
-				if await connect_voice(message):
-					player = client.voice.create_ffmpeg_player(sound_path)
+	
+
+				voice = await connect_voice(message)
+
+				if voice == False:
+					await client.send_message(message.channel, "Could not connect to voice channel")
+				else:
+					player = voice.create_ffmpeg_player(sound_path)
 					player.start()
 			else:
 				await client.send_message(message.channel, "No sound file was found for '{0}.'".format(message.content))
@@ -494,34 +500,34 @@ async def string_to_message(message):
 
 
 async def connect_voice(message):
-	if not client.is_voice_connected():
+	if not client.is_voice_connected(message.server):
 		if message.author.voice_channel:
 			if message.author.voice_channel.permissions_for(message.server.me).connect:
-				await client.join_voice_channel(message.author.voice_channel)
+				voice = await client.join_voice_channel(message.author.voice_channel)
+				return voice
 			else:
 				await client.send_message(message.channel, "{} `I need permissions to join that channel.`".format(message.author.mention))
 				return False
 		else:
 			await client.send_message(message.channel, "{} `You need to join a voice channel first.`".format(message.author.mention))
 			return False
-
-		return True
 	else:
 		if message.author.voice_channel:
-			if client.voice.channel == message.author.voice_channel:
-				return True
+			voice = client.voice_client_in(message.server)
+			if client.voice_client_in(message.server).channel == message.author.voice_channel:
+				return voice
 			else:
-				await leaveVoice()
-				await client.join_voice_channel(message.author.voice_channel)
-				return True
+				await leaveVoice(message, voice)
+				voice = await client.join_voice_channel(message.author.voice_channel)
+				return voice
 		else:
 			await client.send_message(message.channel, "{} `You need to join a voice channel first.`".format(message.author.mention))
 			return False
 
 
-async def leaveVoice():
-	if client.is_voice_connected():
-		await client.voice.disconnect()
+async def leaveVoice(message, voice):
+	if client.is_voice_connected(message.server):
+		await voice.disconnect()
 
 # Print a message
 async def print_message(msg):

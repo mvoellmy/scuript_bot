@@ -59,6 +59,10 @@ https://github.com/Rapptz/discord.py
 
 Note that this requires `git` to be installed.
 
+Install Pillow:
+
+    pip install pillow
+
 Install the Riot API wrapper using pip:
 
     pip install riotwatcher
@@ -86,7 +90,7 @@ https://www.opus-codec.org/
 
 ### Setting up your cfg.txt
 
-Add src/cfg.txt with your bots credidentials.
+Add cfg/cfg.txt with your bots credidentials.
 
     [scuriptdiscord]
     username_discord = youremail
