@@ -80,7 +80,7 @@ class scuriptdiscord():
 				await client.send_message(message.channel, 'There has been an error with downloading the emotes.')
 	
 	   
-		elif message.content == '!emotes':
+		elif message.content == '!emotes' and str(message.author).lower() != 'SCURIPT_BOT'.lower():
 			emote_msg = 'All available emotes:\n'
 			for emote in emotes_list:
 				emote_msg = emote_msg + str(emote) + '\n'
