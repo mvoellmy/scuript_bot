@@ -67,7 +67,8 @@ class scuriptdiscord():
 					"!tts <YOUR_TEXT>"           : "Let the bot speak for you!",
 					"!set_game <GAME_NAME>"      : "Set the game of SCURIPT_BOT (Admin only).",
 					"!emotes"                    : "Get available emotes.",
-					"!dindindin"				 : "Ily's Balls *Ching Ching*"}
+					"!dindindin"				 : "Ily's Balls *Ching Ching*",
+					"!sushiskrasserclutchholyshit" : "The legend say he'll send the clutch to his grandchildrens."}
 	
 		if message.author.avatar == None:
 			await client.send_message(message.author, 'Dude, set a profile picture allready.')    
@@ -79,7 +80,11 @@ class scuriptdiscord():
 			else:
 				await client.send_message(message.channel, 'There has been an error with downloading the emotes.')
 	
-	   
+
+		elif message.content == '!sushiskrasserclutchholyshit' and str(message.author).lower() != 'SCURIPT_BOT'.lower():	   	
+			await client.send_message(message.channel, 'wow, much skill', tts=True)
+			await client.send_message(message.channel, 'steam://rungame/730/76561202255233023/+csgo_download_match%20CSGO-FuM2a-XFLOO-P38zb-iLMaS-tadyC')
+
 		elif message.content == '!emotes' and str(message.author).lower() != 'SCURIPT_BOT'.lower():
 			emote_msg = 'All available emotes:\n'
 			for emote in emotes_list:
